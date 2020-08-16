@@ -1,10 +1,15 @@
-import { addMessages, locale } from 'svelte-i18n';
+import { register, init, getLocaleFromNavigator, addMessages } from 'svelte-i18n'
 
-import en from './locales/en.json';
-import it from './locales/it.json';
+// TODO: switch to async
+//register('en', () => import('./locales/en.json'))
+//register('it', () => import('./locales/it.json'))
+import en from './locales/en.json'
+import it from './locales/it.json'
 
 addMessages('en', en)
 addMessages('it', it)
 
-// TODO: detect browser locale
-locale.set('en')
+init({
+  fallbackLocale: 'en',
+  initialLocale: getLocaleFromNavigator(),
+})
