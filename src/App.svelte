@@ -1,8 +1,8 @@
 <script>
 
 	import { BackEndClient } from './services/be_client.js';
-	import { GameService, key as gameServiceKey } from './services/game_service.js';
-	import { AuthenticationService, key as authServiceKey } from './services/authentication_service.js';
+	import { GameService, key as gameServiceKey, currentGame, currentGameState } from './services/game_service.js';
+	import { AuthenticationService, key as authServiceKey, signedIn } from './services/authentication_service.js';
 
 	import { setContext } from 'svelte';
 
@@ -19,12 +19,8 @@
 
 	const beClient = new BackEndClient(endpoint)
 
-	const authService = new AuthenticationService(beClient)
-	const gameService = new GameService(beClient)
-
-	setContext(authServiceKey, authService)
-	setContext(gameServiceKey, gameService)
-
+	setContext(authServiceKey, new AuthenticationService(beClient))
+	setContext(gameServiceKey, new GameService(beClient))
 
 	// initialize i18n
 	import './i18n';
@@ -32,14 +28,14 @@
 </script>
 
 <main>
-	{#await authService.isSignedIn()}
+	{#await $signedIn}
 		<p>Loading...</p>
 	{:then signedIn}
 		{#if !signedIn}
 			<LandingPage/>
-		{:else if !gameService.selectedGame}
+		{:else if !$currentGame}
 			<StartGame/>
-		{:else if gameService.selectedGame.state === GameState.starting}
+		{:else if $currentGameState === GameState.starting}
 			<ConfigureGame/>
 		{:else}
 			<GameTable/>
