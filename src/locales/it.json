@@ -1,0 +1,9 @@
+{
+    "app.name": "Cluedo",
+
+    "landing.first_welcome": "Ciao, benvenuta o benvenuto!",
+    "landing.presentation": "Prima di iniziare a giocare conosciamoci un po'.",
+    "landing.username.placeholder": "Hai un soprannome?",
+    "landing.username.label": "Inserisci il tuo nome o soprannome o un modo qualsiasi con cui vuoi presentarti agli altri giocatori:",
+    "landing.signin": "Entra"
+}

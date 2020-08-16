@@ -25,6 +25,10 @@
 	setContext(authServiceKey, authService)
 	setContext(gameServiceKey, gameService)
 
+
+	// initialize i18n
+	import './i18n';
+
 </script>
 
 <main>

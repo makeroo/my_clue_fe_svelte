@@ -1,11 +1,15 @@
-<h1>app.name</h1>
+<script>
+     import { _ } from 'svelte-i18n';
+</script>
 
-<p>landing.first_wellcome</p>
-<p>landing.presentation</p>
+<h1>{$_('app.name')}</h1>
+
+<p>{$_('landing.first_welcome')}</p>
+<p>{$_('landing.presentation')}</p>
 
 <div>
-    <label for="username">landing.username.label</label>
-    <input id="username" type=text placeholder="landing.username.placeholder"/>
+    <label for="username">{$_('landing.username.label')}</label>
+    <input id="username" type=text placeholder="{$_('landing.username.placeholder')}"/>
 
-    <button type=submit>landing.signin</button> 
+    <button type=submit>{$_('landing.signin')}</button>
 </div>

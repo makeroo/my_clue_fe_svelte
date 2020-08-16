@@ -1,0 +1,9 @@
+{
+    "app.name": "Cluedo",
+
+    "landing.first_welcome": "Welcome!",
+    "landing.presentation": "First of all, let's know each other a bit.",
+    "landing.username.placeholder": "Do you have a nickname?",
+    "landing.username.label": "Insert your name or a nickname or anything you want the other players call you:",
+    "landing.signin": "Sign In"
+}
