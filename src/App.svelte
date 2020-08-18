@@ -2,7 +2,7 @@
 
 	import { BackEndClient } from './services/be_client.js';
 	import { GameService, key as gameServiceKey, currentGame, currentGameState } from './services/game_service.js';
-	import { AuthenticationService, key as authServiceKey, signedIn } from './services/authentication_service.js';
+	import { AuthenticationService, key as authServiceKey, loggedUserName } from './services/authentication_service.js';
 
 	import { setContext } from 'svelte';
 
@@ -28,10 +28,10 @@
 </script>
 
 <main>
-	{#await $signedIn}
+	{#await $loggedUserName}
 		<p>Loading...</p>
-	{:then signedIn}
-		{#if !signedIn}
+	{:then userName}
+		{#if !userName}
 			<LandingPage/>
 		{:else if !$currentGame}
 			<StartGame/>

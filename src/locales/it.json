@@ -5,5 +5,13 @@
     "landing.presentation": "Prima di iniziare a giocare conosciamoci un po'.",
     "landing.username.placeholder": "Hai un soprannome?",
     "landing.username.label": "Inserisci il tuo nome o soprannome o un modo qualsiasi con cui vuoi presentarti agli altri giocatori:",
-    "landing.signin": "Entra"
+    "landing.signin": "Entra",
+
+    "start_game.new.title": "Puoi iniziare una nuova partita",
+    "start_game.new.create": "Nuova",
+    "start_game.resume.loading": "Recupero partite in corso...",
+    "start_game.resume.title": "Oppure riprenderne una gi&agrave; iniziata",
+    "start_game.join.title": "Oppure aggiungerti ad una in preparazione.",
+    "start_game.join.description": "Chiedi il codice a chi ha creato la partita, e inseriscilo qua sotto:",
+    "start_game.join.join": "Entra"
 }

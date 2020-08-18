@@ -1,6 +1,8 @@
 import { writable } from 'svelte/store';
 
-export const signedIn = writable(Promise.resolve(false));
+export const loggedUserName = writable(Promise.resolve(false));
+
+export const loggedUserGames = writable(Promise.resolve([]));
 
 export class AuthenticationService {
     constructor (beClient) {
@@ -10,11 +12,11 @@ export class AuthenticationService {
     }
 
     _isSignedIn() {
-        console.log('isSignedIn')
+        //console.log('isSignedIn')
 
-        signedIn.set(new Promise(resolve => {
+        loggedUserName.set(new Promise(resolve => {
             setTimeout(() => {
-                resolve(this.signed)
+                resolve(false)
 
             },1000)
         }))
@@ -25,15 +27,14 @@ export class AuthenticationService {
             throw 'empty_name'
         }
 
-        console.log('signedIn', name)
+        //console.log('signedIn', name)
 
         return new Promise(resolve => {
             setTimeout(() => {
-                this.signed = true
+                resolve(name)
 
-                resolve(this.signed)
-
-                signedIn.set(Promise.resolve(true))
+                loggedUserName.set(Promise.resolve(name))
+                // TODO: fill loggedUserGames
             },1000)
         })
     }
