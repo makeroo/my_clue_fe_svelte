@@ -3,12 +3,19 @@
     import { _ } from 'svelte-i18n';
 
     import { loggedUserName, loggedUserGames } from '../services/authentication_service.js';
+    import { key } from '../services/game_service.js';
 
     let gameId;
+    let gameService = getContext(key);
 
     function handleCreate () {
-        // TODO
-        console.log('create')
+        //console.log('create')
+
+        gameService.createGame().catch((error) => {
+            console.log('game creation failed', error);
+
+            // TODO: show error
+        })
     }
 
     function handleJoin () {

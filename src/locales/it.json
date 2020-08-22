@@ -13,5 +13,24 @@
     "start_game.resume.title": "Oppure riprenderne una gi&agrave; iniziata",
     "start_game.join.title": "Oppure aggiungerti ad una in preparazione.",
     "start_game.join.description": "Chiedi il codice a chi ha creato la partita, e inseriscilo qua sotto:",
-    "start_game.join.join": "Entra"
+    "start_game.join.join": "Entra",
+
+    "game.character.missscarlett": "Miss Scarlett",
+    "game.character.revgreen": "Rev. Green",
+    "game.character.colmustard": "Col. Mustard",
+    "game.character.profplum": "Prof. Plum",
+    "game.character.msrpeacock": "Msr. Peacock",
+    "game.character.msrwhite": "Msr. Orchid",
+
+    "config_game.title": "Nuova partita",
+    "config_game.share_game_code": "Comunica il codice per permettere ad altri giocatori di partecipare:",
+    "config_game.select_player": "Seleziona il personaggio:",
+    "config_game.start": "Inizia",
+    "config_game.players_without_character": "Gli indecisi:",
+    "config_game.waiting": "Quando anche tutti gli altri giocatori saranno pronti la partita inizier&agrave;!",
+    "config_game.press_start": "Premi Inizia per confermare la scelta del personaggio e iniziare la partita.",
+
+    "running_game.game_code": "Gioco:",
+
+    "": ""
 }

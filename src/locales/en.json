@@ -13,5 +13,22 @@
     "start_game.resume.title": "Resume a previously started game",
     "start_game.join.title": "Join a table",
     "start_game.join.description": "Ask the game code to your friends and type it below:",
-    "start_game.join.join": "Join"
+    "start_game.join.join": "Join",
+
+    "game.character.missscarlett": "Miss Scarlett",
+    "game.character.revgreen": "Rev. Green",
+    "game.character.colmustard": "Col. Mustard",
+    "game.character.profplum": "Prof. Plum",
+    "game.character.msrpeacock": "Msr. Peacock",
+    "game.character.msrwhite": "Msr. White",
+
+    "config_game.title": "New game",
+    "config_game.share_game_code": "Share the game code to invite other players to this table:",
+    "config_game.select_player": "Select your character:",
+    "config_game.start": "Start",
+    "config_game.players_without_character": "The undecided:",
+    "config_game.waiting": "The game will start when all the players have choosen a character and clicked start.",
+    "config_game.press_start": "Tap Start to confirm your decision and tell the other players that you're ready.",
+
+    "": ""
 }

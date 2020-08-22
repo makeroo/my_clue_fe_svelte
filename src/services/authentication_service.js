@@ -18,7 +18,7 @@ export class AuthenticationService {
             setTimeout(() => {
                 resolve(false)
 
-            },1000)
+            },100)
         }))
     }
 
@@ -35,7 +35,7 @@ export class AuthenticationService {
 
                 loggedUserName.set(Promise.resolve(name))
                 // TODO: fill loggedUserGames
-            },1000)
+            },100)
         })
     }
 }
