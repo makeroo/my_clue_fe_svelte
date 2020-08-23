@@ -29,6 +29,8 @@
     "config_game.players_without_character": "Gli indecisi:",
     "config_game.waiting": "Quando anche tutti gli altri giocatori saranno pronti la partita inizier&agrave;!",
     "config_game.press_start": "Premi Inizia per confermare la scelta del personaggio e iniziare la partita.",
+    "config_game.not_enough_players": "Non ci sono abbastanza giocatori per iniziare la partita",
+    "config_game.character_available": "Libero",
 
     "running_game.game_code": "Gioco:",
 

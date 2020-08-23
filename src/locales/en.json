@@ -29,6 +29,8 @@
     "config_game.players_without_character": "The undecided:",
     "config_game.waiting": "The game will start when all the players have choosen a character and clicked start.",
     "config_game.press_start": "Tap Start to confirm your decision and tell the other players that you're ready.",
+    "config_game.not_enough_players": "Not enough players to start the game. Share the game ID among your friends to invite them here",
+    "config_game.character_available": "Available",
 
     "": ""
 }
