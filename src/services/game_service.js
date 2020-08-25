@@ -126,7 +126,7 @@ export class GameService {
             setTimeout(() => {
                 this._addPlayer(2, "gre", Characters[1], true, PlayerState.playing)
                 this._addPlayer(3, "morg", null, false, PlayerState.playing)
-            }, 2500);
+            }, 500);
         })
     }
 
