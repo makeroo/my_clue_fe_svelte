@@ -32,17 +32,18 @@ import { clueBoard, CellType, BoardWidth, BoardHeight } from "../../services/my_
 
 <style>
     .cell {
-        float: left;
-        width: 20px;
-        height: 20px;
+        height: 0;
+        padding-top: 100%;
     }
 
     .blank {
         background-color: darkgray;
     }
     .corridor {
-        border: 1px dashed gray;
-        box-sizing: border-box;
+        background-color: white;
+    }
+    .door {
+        background-color: white;
     }
     .room {
         background-color: #ecd5b7

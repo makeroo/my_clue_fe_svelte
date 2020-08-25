@@ -8,87 +8,93 @@
 <style>
     .board {
         position: relative;
+        display: grid;
+        grid-template-columns: repeat(24, 1fr);
+        grid-template-rows: repeat(25, 1fr);
+        max-width: 480px;
+        max-height: 500px;
+        column-gap: 2px; /* browser adds 2px ghost gap anyway, breaking layout. At least, setting it fixes layout */
+        row-gap: 2px;
+        width: 100%;
+        background-color: #ecd5b7;
     }
 
-    .row {
-        clear: both;
+    .room-title {
+      font-size: 50%;
     }
 
     .kitchen {
       position: absolute;
-      left: 30px;
-      top: 70px;
+      left: 6%;
+      top: 14%;
       color: black;
     }
 
     .ball {
       position: absolute;
-      left: 185px;
-      top: 92px;
+      left: 38%;
+      top: 18%;
       color: black;
     }
 
     .conservatory {
       position: absolute;
-      left: 369px;
-      top: 63px;
+      left: 77%;
+      top: 12%;
       color: black;
-      font-size: 11px;
     }
 
     .dining {
       position: absolute;
-      left: 16px;
-      top: 255px;
+      left: 3%;
+      top: 51%;
       color: black;
     }
 
     .billiard {
       position: absolute;
-      left: 368px;
-      top: 206px;
+      left: 80%;
+      top: 41%;
       color: black;
     }
 
     .library {
       position: absolute;
-      left: 377px;
-      top: 327px;
+      left: 79%;
+      top: 65%;
       color: black;
     }
 
     .lounge {
       position: absolute;
-      left: 42px;
-      top: 438px;
+      left: 9%;
+      top: 88%;
       color: black;
     }
 
     .hall {
       position: absolute;
-      left: 205px;
-      top: 431px;
+      left: 43%;
+      top: 86%;
       color: black;
     }
 
     .study {
       position: absolute;
-      left: 387px;
-      top: 458px;
+      left: 81%;
+      top: 92%;
       color: black;
     }
 </style>
 
 <div class="board">
     {#each clueBoard as row, y}
-        <div class="row">
             {#each row as cell, x}
                 <Cell col={x} row={y}/>
             {/each}
-        </div>
     {/each}
 
     {#each Rooms as room}
-        <div class={room}>{$_(`game.room.${room}`)}</div>
+        <div class={`room-title ${room}`}>{$_(`game.room.${room}`)}</div>
     {/each}
 </div>
