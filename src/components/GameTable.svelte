@@ -3,10 +3,10 @@
 
     import { currentGame, turnSequence } from '../services/game_service.js';
 
-    import Board from './Board.svelte';
-    import Deck from './Deck.svelte';
-    import Avatar from './Avatar.svelte';
-    import PlayerSummary from './PlayerSummary.svelte';
+    import Board from './game_table/Board.svelte';
+    import Deck from './game_table/Deck.svelte';
+    import Avatar from './game_table/Avatar.svelte';
+    import PlayerSummary from './game_table/PlayerSummary.svelte';
 </script>
 
 <h1>{$_('app.name')}</h1>

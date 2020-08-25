@@ -1,5 +1,5 @@
 <script>
-    import { playerName, playerCharacter, currentPlayer, playerOnline, playerState } from '../services/game_service.js';
+    import { playerName, playerCharacter, currentPlayer, playerOnline, playerState } from '../../services/game_service.js';
 
     export let playerId;
 
