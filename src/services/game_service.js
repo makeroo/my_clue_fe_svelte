@@ -17,6 +17,7 @@ const playersCharacter = {}; // playerId -> store:Character?
 const playersOnline = {}; // playerId -> store:bool
 const playersState = {}; // playerId -> store:PlayerState
 const charactersPlayer = {}; // character -> store:playerId?
+const playersPosition = {}; // character -> {map_x:, map_y:, room:}
 
 export const turnSequence = writable([]);
 
@@ -59,6 +60,22 @@ export function characterPlayer(character) {
         store = writable(null);
 
         charactersPlayer[character] = store;
+    }
+
+    return store;
+}
+
+export function playerPosition(character) {
+    let store = playersPosition[character];
+
+    if (store === undefined) {
+        store = writable({
+            map_x: 0,
+            map_y: 0,
+            room: null
+        });
+
+        playersPosition[character] = store;
     }
 
     return store;

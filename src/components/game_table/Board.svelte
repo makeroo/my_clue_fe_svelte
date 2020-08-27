@@ -2,6 +2,8 @@
     import { clueBoard, Rooms } from "../../services/my_clue_api";
     import Cell from "./Cell.svelte";
     import { _ } from "svelte-i18n";
+    import { turnSequence } from "../../services/game_service.js";
+    import Pawn from "./Pawn.svelte";
 
 </script>
 
@@ -11,6 +13,7 @@
         display: grid;
         grid-template-columns: repeat(24, 1fr);
         grid-template-rows: repeat(25, 1fr);
+        min-width: 320px;
         max-width: 480px;
         max-height: 500px;
         column-gap: 2px; /* browser adds 2px ghost gap anyway, breaking layout. At least, setting it fixes layout */
@@ -97,4 +100,8 @@
     {#each Rooms as room}
         <div class={`room-title ${room}`}>{$_(`game.room.${room}`)}</div>
     {/each}
-</div>
+
+    {#each $turnSequence as playerId}
+      <Pawn playerId={playerId}/>
+    {/each}
+  </div>
