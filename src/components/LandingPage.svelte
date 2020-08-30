@@ -5,12 +5,14 @@
 
     const authService = getContext(key)
 
+    export let error;
+
     let name;
     let nameInput;
 
     function handleSignIn() {
         authService.signIn(name).catch(error => {
-            console.log('failed', error)
+            //console.log('failed', error)
 
             // TODO: handle error
 
@@ -31,3 +33,7 @@
 
     <button type=submit on:click={handleSignIn}>{$_('landing.signin')}</button>
 </div>
+
+{#if error}
+    <p style="color: red">{$_(`error.${error.error}`)}</p>
+{/if}

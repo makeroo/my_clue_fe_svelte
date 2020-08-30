@@ -42,5 +42,6 @@
     "config_game.not_enough_players": "Not enough players to start the game. Share the game ID among your friends to invite them here",
     "config_game.character_available": "Available",
 
+    "error.not_connected": "The server is unreachable",
     "": ""
 }

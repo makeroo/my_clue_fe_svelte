@@ -44,5 +44,7 @@
 
     "running_game.game_code": "Gioco:",
 
+    "error.not_connected": "Gioco spento. Se questo messaggio non scompare dopo pochi secondi prova a ricaricare la pagina.",
+
     "": ""
 }

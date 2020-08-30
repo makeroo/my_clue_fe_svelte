@@ -1,6 +1,6 @@
 <script>
 
-	import { BackEndClient } from './services/be_client.js';
+	import { BackEndClient, Errors } from './services/be_client.js';
 	import { GameService, key as gameServiceKey, currentGame, currentGameState } from './services/game_service.js';
 	import { AuthenticationService, key as authServiceKey, loggedUserName } from './services/authentication_service.js';
 
@@ -13,17 +13,18 @@
 
 	import { GameState } from './services/my_clue_api';
 
-	const endpoint = 'ws://localhost:8080/ws'
+	//const endpoint = 'ws://localhost:8080/ws'
 	// production:
-	//const endpoint = `ws://${window.location.host}/ws`
+	const endpoint = `ws://${window.location.host}/clue/ws`
 
 	const beClient = new BackEndClient(endpoint)
 
-	setContext(authServiceKey, new AuthenticationService(beClient))
+	setContext(authServiceKey, new AuthenticationService(beClient, "cluedo.auth"))
 	setContext(gameServiceKey, new GameService(beClient))
 
 	// initialize i18n
 	import './i18n';
+	import { _ } from 'svelte-i18n';
 
 </script>
 
@@ -32,7 +33,7 @@
 		<p>Loading...</p>
 	{:then userName}
 		{#if !userName}
-			<LandingPage/>
+			<LandingPage error={null}/>
 		{:else if !$currentGame}
 			<StartGame/>
 		{:else if $currentGameState === GameState.starting}
@@ -41,6 +42,10 @@
 			<GameTable/>
 		{/if}
 	{:catch error}
-		<p style="color: red">{error.message}</p>
+		{#if error.error === Errors.NotConnected}
+			<div>{$_(`error.${error.error}`)}</div>
+		{:else}
+			<LandingPage error={error}/>
+		{/if}
 	{/await}
 </main>
