@@ -33,23 +33,23 @@
     }
 
     .missscarlett {
-      background-image: url(images/scarlett.png);
+        background-image: url(../images/scarlett.png);
       background-size: cover;
     }
     .revgreen {
-      background-image: url(images/green.png);
+      background-image: url(../images/green.png);
     }
     .colmustard {
-      background-image: url(images/mustard.png);
+      background-image: url(../images/mustard.png);
     }
     .profplum {
-      background-image: url(images/plum.png);
+      background-image: url(../images/plum.png);
     }
     .mrspeacock {
-      background-image: url(images/peacock.png);
+      background-image: url(../images/peacock.png);
     }
     .mrswhite {
-      background-image: url(images/white.png);
+      background-image: url(../images/white.png);
     }
 </style>
 
