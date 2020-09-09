@@ -44,7 +44,6 @@ export const Weapons = [
     "wrenck"
 ];
 
-
 export const CellType = {
     Blank: "blank",
     Room: "room", // which room
