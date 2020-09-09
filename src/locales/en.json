@@ -14,6 +14,7 @@
     "start_game.join.title": "Join a table",
     "start_game.join.description": "Ask the game code to your friends and type it below:",
     "start_game.join.join": "Join",
+    "start_game.players": "Players at the table: ",
 
     "game.character.missscarlett": "Miss Scarlett",
     "game.character.revgreen": "Rev. Green",
@@ -32,6 +33,8 @@
     "game.room.hall": "Hall",
     "game.room.study": "Study",
 
+    "player.me": "me",
+
     "config_game.title": "New game",
     "config_game.share_game_code": "Share the game code to invite other players to this table:",
     "config_game.select_player": "Select your character:",
@@ -43,5 +46,7 @@
     "config_game.character_available": "Available",
 
     "error.not_connected": "The server is unreachable",
+    "error.unknown_token": "Authentication failed. Sign up again.",
+
     "": ""
 }

@@ -14,6 +14,7 @@
     "start_game.join.title": "Oppure aggiungerti ad una in preparazione.",
     "start_game.join.description": "Chiedi il codice a chi ha creato la partita, e inseriscilo qua sotto:",
     "start_game.join.join": "Entra",
+    "start_game.players": "Giocatori al tavolo: ",
 
     "game.character.missscarlett": "Miss Scarlett",
     "game.character.revgreen": "Rev. Green",
@@ -32,6 +33,8 @@
     "game.room.hall": "Ingresso",
     "game.room.study": "Studio",
 
+    "player.me": "io",
+
     "config_game.title": "Nuova partita",
     "config_game.share_game_code": "Comunica il codice per permettere ad altri giocatori di partecipare:",
     "config_game.select_player": "Seleziona il personaggio:",
@@ -45,6 +48,7 @@
     "running_game.game_code": "Gioco:",
 
     "error.not_connected": "Gioco spento. Se questo messaggio non scompare dopo pochi secondi prova a ricaricare la pagina.",
+    "error.unknown_token": "Autenticazione fallita. Iscriviti di nuovo.",
 
     "": ""
 }
