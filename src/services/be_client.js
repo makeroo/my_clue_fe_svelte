@@ -1,4 +1,6 @@
-let MessageType = {
+import { Characters, Rooms, Weapons } from './my_clue_api.js';
+
+export let MessageType = {
     signIn: "sign_in",
     signInResponse: "sign_in_response",
 
@@ -28,7 +30,7 @@ let MessageType = {
 
 	notifyGameStarted: "notify_game_started",
 
-	notifyMoveRecord: "notify_game_state",
+	notifyMoveRecord: "notify_move_record",
 
 	error: "error",
 }
@@ -90,6 +92,21 @@ export const Errors = {
     NotConnected: "not_connected",
     RequestDidTimeout: "request_did_timeout",
 }
+
+const symbolToCard = {};
+
+(function loadSymbolToCard() {
+    let start = 0;
+    for (let weapon of Weapons) {
+        symbolToCard[weapon] = ++start;
+    }
+    for (let room of Rooms) {
+        symbolToCard[room] = ++start;
+    }
+    for (let character of Characters) {
+        symbolToCard[character] = ++start;
+    }
+})();
 
 export class BackEndClient {
     retryDelay = 3512;
@@ -156,7 +173,7 @@ export class BackEndClient {
 
     selectChar(character) {
         let req = {
-            character: characterToCard(character)
+            character: symbolToCard[character]
         }
 
         return this.oneWay(MessageType.selectChar, req)
@@ -176,7 +193,7 @@ export class BackEndClient {
 
     enterRoom(room) {
         let req = {
-            enter_room: roomToCard(room)
+            enter_room: symbolToCard[room]
         }
 
         return this.oneWay(MessageType.move, req)
@@ -193,9 +210,9 @@ export class BackEndClient {
 
     querySolution(character, room, weapon) {
         let req = {
-            character: characterToCard(character),
-            room: roomToCard(room),
-            weapon: weaponToCard(weapon),
+            character: symbolToCard[character],
+            room: symbolToCard[room],
+            weapon: symbolToCard[weapon],
         }
 
         return this.oneWay(MessageType.querySolution, req)
@@ -214,9 +231,9 @@ export class BackEndClient {
 
     declareSolution(character, room, weapon) {
         let req = {
-            character: characterToCard(character),
-            room: roomToCard(room),
-            weapon: weaponToCard(weapon),
+            character: symbolToCard[character],
+            room: symbolToCard[room],
+            weapon: symbolToCard[weapon],
         }
 
         return this.oneWay(MessageType.declareSolution, req)
@@ -268,7 +285,6 @@ export class BackEndClient {
     
                     rr.reject({ error: Errors.RequestDidTimeout});
                 }, this.requestTimeout),
-                //requestId: requestId
             }
     
             let header = {
@@ -378,14 +394,20 @@ export class BackEndClient {
     }
 }
 
-export function isCharacter(card) {
-    return card >= CardMissScarlett && card <= CardMrsWhite;
+export function cardToCharacter(card) {
+    if (card >= CardMissScarlett && card <= CardMrsWhite) {
+        return Characters[card - CardMissScarlett];
+    }
 }
 
-export function isRoom(card) {
-    return card >= CardKitchen && card <= CardStudy;
+export function cardToRoom(card) {
+    if (card >= CardKitchen && card <= CardStudy) {
+        return Rooms[card - CardKitchen];
+    }
 }
 
-export function isWeapon(card) {
-    return card >= CardCandlestick && card <= CardWrenck;
+export function cardToWeapon(card) {
+    if (card >= CardCandlestick && card <= CardWrenck) {
+        return Weapons[card - CardCandlestick];
+    }
 }
