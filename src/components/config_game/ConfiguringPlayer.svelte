@@ -14,5 +14,5 @@
 {#if hideIfReady && $character !== null}
     <div style="display: none"></div>
 {:else}
-    <div class:online={$online}>{$name}</div>
+    <div class:online={$online}>{playerId === $myPlayerId ? $_("player.me") : $name}</div>
 {/if}
