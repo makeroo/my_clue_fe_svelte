@@ -1,6 +1,8 @@
-import { writable, derived, get } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 
-import { GameState, Characters, PlayerState } from './my_clue_api.js';
+import { GameState, PlayerState } from './my_clue_api.js';
+
+import { MessageType, cardToCharacter } from './be_client.js';
 
 // Note: these stores are global singletons. They should be game service instance properties instead
 // so that we could build an UI capable of playing several games concurrently.
@@ -107,108 +109,114 @@ export function playerState(playerId) {
 
 export class GameService {
     constructor (beClient) {
-        this.beClient = beClient
-    }
+        this.beClient = beClient;
 
-    _addPlayer(playerId, name, character, online, state) {
-        playerName(playerId).set(name);
-        playerCharacter(playerId).set(character);
-        characterPlayer(character).set(playerId);
-        playerOnline(playerId).set(online);
-        playerState(playerId).set(state);
+        beClient.addRequestHandler(MessageType.notifyUserState, {
+            handleMessage: (msg) => {
+                const playerId = msg.player_id;
 
-        if (character === null) {
-            let pwc = get(playersWithoutCharacter);
-            pwc.push(playerId);
-            playersWithoutCharacter.set(pwc);
-        }
-
-        let seq = get(turnSequence);
-        seq.push(playerId);
-        turnSequence.set(seq);
-    }
-
-    createGame() {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve()
-
-                currentGame.set('XIWE')
-
-                myPlayerId.set(1)
-                this._addPlayer(1, "cass", null, true, PlayerState.playing)
-                currentGameState.set(GameState.starting)
-            },100)
-
-            setTimeout(() => {
-                this._addPlayer(2, "gre", Characters[1], true, PlayerState.playing)
-                this._addPlayer(3, "morg", null, false, PlayerState.playing)
-            }, 500);
-        })
-    }
-
-    selectCharacter(character) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                let myId = get(myPlayerId);
-
-                if (myId === null) {
-                    reject("no selected game")
+                if (typeof playerId !== "number") {
+                    console.error("illegal user state message: msg=", msg);
                     return;
                 }
 
-                resolve()
-
-                let charStore = playerCharacter(myId);
-                let oldChar = get(charStore);
-                charStore.set(character);
-                characterPlayer(character).set(myId);
-                if (oldChar !== null) {
-                    characterPlayer(oldChar).set(null);
-                } else {
-                    let pwc = get(playersWithoutCharacter);
-
-                    playersWithoutCharacter.set(pwc.filter((v) => v != myId));
+                if (!get(currentGame)) {
+                    console.warn("ignoring user state update, no current game: msg=", msg);
+                    return;
                 }
-            }, 10)
+
+                const players = get(turnSequence);
+
+                if (players.find((element) => element === playerId) === undefined) {
+                    turnSequence.set([...players, playerId]);
+                }
+
+                if (typeof msg.name === "string") {
+                    playerName(playerId).set(msg.name);
+                }
+                if (typeof msg.online === "boolean") {
+                    playerOnline(playerId).set(msg.online);
+                }
+
+                let character = cardToCharacter(msg.character);
+
+                if (character !== undefined) {
+                    const store = playerCharacter(playerId);
+                    const oldChar = get(store);
+
+                    if (oldChar !== character) {
+                        store.set(character);
+
+                        characterPlayer(character).set(playerId);
+
+                        if (oldChar !== null) {
+                            characterPlayer(oldChar).set(null);
+                        }
+                    }
+                }
+            }
+        });
+
+        beClient.addRequestHandler(MessageType.notifyGameStarted, {
+            handleMessage: (msg) => {
+                console.log("TODO parse game started")
+            }
+        });
+
+        beClient.addRequestHandler(MessageType.notifyMoveRecord, {
+            handleMessage: (msg) => {
+                console.log("TODO parse move record")
+            }
         });
     }
 
-    voteStart() {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                currentGameState.set(GameState.newTurn);
-/*
-                players.set({
-                    1: 'cass',
-                    2: 'gre',
-                    3: 'morga'
-                });
+    async createGame() {
+        return this.beClient.createGame().then((resp) => {
+            currentGame.set(resp.game_id);
 
-                playerCharacter.set({
-                    1: Characters[0],
-                    2: Characters[1],
-                    3: Characters[2],
-                });
+            myPlayerId.set(resp.my_player_id);
+        });
+    }
 
-                turnSequence.set([1,2,3]);
-                currentPlayer.set(1);
+    async joinGame(gameId) {
+        return this.beClient.joinGame(gameId).then((resp) => {
+            currentGame.set(gameId);
 
-                playerOnline.set({
-                    1: true,
-                    2: true,
-                    3: true,
-                });
+            myPlayerId.set(resp.my_player_id);
 
-                playerState.set({
-                    1: PlayerState.playing,
-                    2: PlayerState.failed,
-                    3: PlayerState.playing,
-                })
-*/
-                resolve();
-            }, 10)
-        })
+            const players = [];
+
+            for (let player of resp.players) {
+                const playerId = player.player_id;
+
+                players.push(playerId);
+
+                if (typeof player.name === 'string') {
+                    playerName(playerId).set(player.name);
+                }
+
+                const ch = cardToCharacter(player.character);
+
+                if (ch !== undefined) {
+                    playerCharacter(playerId).set(ch);
+                    characterPlayer(ch).set(playerId);
+                }
+
+                if (typeof player.online === 'boolean') {
+                    playerOnline(playerId).set(player.online);
+                }
+            }
+
+            turnSequence.set(players);
+        });
+    }
+
+    async selectCharacter(character) {
+        return this.beClient.selectChar(character);
+    }
+
+    async voteStart() {
+        return this.beClient.voteStart(true);
     }
 }
 
