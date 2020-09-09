@@ -3,24 +3,26 @@
     import { _ } from 'svelte-i18n';
 
     import { loggedUserName, loggedUserGames } from '../services/authentication_service.js';
-    import { key } from '../services/game_service.js';
+    import { cardToCharacter } from '../services/be_client.js';
+    import { characterPlayer, key, playerCharacter } from '../services/game_service.js';
 
     let gameId;
     let gameService = getContext(key);
 
     function handleCreate () {
-        //console.log('create')
-
         gameService.createGame().catch((error) => {
             console.log('game creation failed', error);
 
             // TODO: show error
-        })
+        });
     }
 
-    function handleJoin () {
-        // TODO
-        console.log('join', gameId)
+    function handleJoin (gameId) {
+        gameService.joinGame(gameId).catch((error) => {
+            console.log('join', error);
+
+            // TODO: show error
+        });
     }
 
 </script>
@@ -43,8 +45,26 @@
         {#if games.length > 0}
             <div>
                 <h2>{$_('start_game.resume.title')}</h2>
-                {#each games as game (game.id)}
-                    <p>TODO {game}</p>
+                {#each games as game (game.game_id)}
+                    <div on:click={() => handleJoin(game.game_id)}>
+                        <span>{game.game_id}</span>
+                        <span>{$_(`${game.game.state}`)}</span>
+                        <div>
+                            <span>{$_("start_game.players")}</span>
+                            {#each game.players as player (player.player_id)}
+                                <div class={player.online? "online" : "offline"}>
+                                    {#if player.player_id === game.my_player_id}
+                                        <span>{$_('player.me')}</span>
+                                    {:else}
+                                        <span>{player.name}</span>
+                                    {/if}
+                                    {#if player.character}
+                                        <span>{$_(`game.character.${cardToCharacter(player.character)}`)}</span>
+                                    {/if}
+                                </div>
+                            {/each}
+                        </div>
+                    </div>
                 {/each}
             </div>
         {/if}
@@ -54,7 +74,7 @@
         <h2>{$_('start_game.join.title')}</h2>
         <p>{$_('start_game.join.description')}</p>
         <input type="text" bind:value={gameId}/>
-        <button type="button" on:click={handleJoin}>{$_('start_game.join.join')}</button>
+        <button type="button" on:click={() => handleJoin(gameId)}>{$_('start_game.join.join')}</button>
     </div>
 
 </div>
