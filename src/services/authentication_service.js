@@ -83,7 +83,7 @@ export class AuthenticationService {
             // return name so that loggedUserName promise will resolve to it
             return name;
         }).catch((e) => {
-            if (e.error === Errors.UnknownToken) {
+            if (e.error === BackEndErrors.UnknownToken) {
                 this.invalidateToken();
             }
 
