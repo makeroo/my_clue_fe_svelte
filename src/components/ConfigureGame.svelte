@@ -16,7 +16,7 @@
 
     let myCharacter = playerCharacter($myPlayerId);
 
-    let charSel = $myCharacter;
+    //let charSel = $myCharacter;
 
     function voteStart() {
         gameService.voteStart().then(() => {
@@ -40,7 +40,7 @@
     <ul>
         {#each Characters as character }
             <li>
-                <CharacterSelection character={character} hideIfReady={true}/>
+                <CharacterSelection character={character}/>
             </li>
         {/each}
     </ul>
@@ -63,7 +63,7 @@
     </div>
 {/if}
 
-{#if $myCharacter}
+{#if $myCharacter && $turnSequence.length >= 2}
     {#if votedStart}
         <p>{$_('config_game.waiting')}</p>
     {:else}
