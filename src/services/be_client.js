@@ -33,7 +33,9 @@ export let MessageType = {
 	notifyMoveRecord: "notify_move_record",
 
 	error: "error",
-}
+
+    empty: "empty"
+};
 
 const GameStateStarting = 0;
 const GameStateNewTurn = 1;
@@ -91,6 +93,7 @@ export const Errors = {
     // client errors
     NotConnected: "not_connected",
     RequestDidTimeout: "request_did_timeout",
+    PayloadDecodingFailed: "payload_decoding_failed"
 }
 
 const symbolToCard = {};
@@ -176,7 +179,7 @@ export class BackEndClient {
             character: symbolToCard[character]
         }
 
-        return this.oneWay(MessageType.selectChar, req)
+        return this.request(MessageType.selectChar, req)
     }
 
     voteStart(vote) {
@@ -184,11 +187,11 @@ export class BackEndClient {
             vote: vote,
         }
 
-        return this.oneWay(MessageType.voteStart, req)
+        return this.request(MessageType.voteStart, req)
     }
 
     rollDices() {
-        return this.oneWay(MessageType.rollDices)
+        return this.request(MessageType.rollDices)
     }
 
     enterRoom(room) {
@@ -196,7 +199,7 @@ export class BackEndClient {
             enter_room: symbolToCard[room]
         }
 
-        return this.oneWay(MessageType.move, req)
+        return this.request(MessageType.move, req)
     }
 
     move(mapX, mapY) {
@@ -205,7 +208,7 @@ export class BackEndClient {
             map_y: mapY,
         }
 
-        return this.oneWay(MessageType.move, req)
+        return this.request(MessageType.move, req)
     }
 
     querySolution(character, room, weapon) {
@@ -215,7 +218,7 @@ export class BackEndClient {
             weapon: symbolToCard[weapon],
         }
 
-        return this.oneWay(MessageType.querySolution, req)
+        return this.request(MessageType.querySolution, req)
     }
 
     reveal(card) {
@@ -226,7 +229,7 @@ export class BackEndClient {
             req.card = card
         }
 
-        return this.oneWay(MessageType.reveal, req)
+        return this.request(MessageType.reveal, req)
     }
 
     declareSolution(character, room, weapon) {
@@ -236,13 +239,13 @@ export class BackEndClient {
             weapon: symbolToCard[weapon],
         }
 
-        return this.oneWay(MessageType.declareSolution, req)
+        return this.request(MessageType.declareSolution, req)
     }
 
     pass() {
-        return this.oneWay(MessageType.pass)
+        return this.request(MessageType.pass)
     }
-
+/*
     oneWay(reqType, data) {
         return new Promise((resolve, reject) => {
             if (this.ws === null) {
@@ -253,17 +256,17 @@ export class BackEndClient {
             let header = {
                 type: reqType,
                 req_id: ++this.requestId,
-            }
+            };
 
-            this.ws.send(JSON.stringify(header))
+            this.ws.send(JSON.stringify(header));
             if (data !== undefined) {
-                this.ws.send(JSON.stringify(data))
+                this.ws.send(JSON.stringify(data));
             }
 
-            resolve(undefined)
+            resolve(undefined);
         })
     }
-
+*/
     requestId = 0
 
     request(reqType, data) {
@@ -285,16 +288,16 @@ export class BackEndClient {
     
                     rr.reject({ error: Errors.RequestDidTimeout});
                 }, this.requestTimeout),
-            }
+            };
     
             let header = {
                 type: reqType,
                 req_id: requestId,
-            }
+            };
 
-            this.ws.send(JSON.stringify(header))
+            this.ws.send(JSON.stringify(header));
             if (data !== undefined) {
-                this.ws.send(JSON.stringify(data))
+                this.ws.send(JSON.stringify(data));
             }
         })
     }
@@ -314,59 +317,24 @@ export class BackEndClient {
 
         this.ws.onmessage = (event) => {
             if (this.activeRequest !== null) {
-                let runningRequest = this.responseHandler[this.activeRequest.req_id]
+                this.deliverMessage(event.data);
 
-                if (runningRequest !== undefined) {
-                    clearTimeout(runningRequest.timeout)
+                this.activeRequest = null;
 
-                    delete this.responseHandler[this.activeRequest.req_id]
-
-                    const isError = this.activeRequest.type === MessageType.error
-                    this.activeRequest = null
-
-                    let msg;
-                    try {
-                        msg = JSON.parse(event.data)
-                    } catch (e) {
-                        console.error('incoming message is not json, ignored', e);
-                        return;
-                    }
-
-                    if (isError) {
-                        runningRequest.reject(msg);
-                    } else {
-                        runningRequest.resolve(msg);
-                    }
-
-                    return
-                }
-
-                let requestHandler = this.requestHandlers[this.activeRequest.type]
-
-                if (requestHandler !== undefined) {
-                    this.activeRequest = null
-
-                    let msg;
-                    try {
-                        msg = JSON.parse(event.data) // TODO: catch exception
-                    } catch (e) {
-                        console.error('incoming message is not json, request rejected', e);
-                        return;
-                    }
-
-                    requestHandler.handleMessage(msg)
-
-                    return
-                }
-
-                this.activeRequest = null
-
-                console.error('unexpected request:', event)
+                return;
             }
 
-            let req = JSON.parse(event.data) // FIXME: unsafe cast
+            try {
+                this.activeRequest = JSON.parse(event.data);
 
-            this.activeRequest = req
+                if (this.activeRequest.type === MessageType.empty) {
+                    this.deliverMessage(null);
+
+                    this.activeRequest = null;
+                }
+            } catch (e) {
+                console.error('incoming message is not json, request rejected', e);
+            }
         }
 
         this.ws.onerror = (event) => {
@@ -387,6 +355,53 @@ export class BackEndClient {
                 this.connect();
             }, this.retryDelay)
         }
+    }
+
+    deliverMessage(msg) {
+        let runningRequest = this.responseHandler[this.activeRequest.req_id];
+
+        if (runningRequest !== undefined) {
+            clearTimeout(runningRequest.timeout);
+
+            delete this.responseHandler[this.activeRequest.req_id];
+
+            try {
+                if (msg !== null) {
+                    msg = JSON.parse(msg);
+                }
+
+                if (this.activeRequest.type === MessageType.error) {
+                    runningRequest.reject(msg);
+                } else {
+                    runningRequest.resolve(msg);
+                }
+
+            } catch (e) {
+                runningRequest.reject({
+                    error: Errors.PayloadDecodingFailed,
+                    cause: e
+                });
+            }
+
+            return;
+        }
+
+        let requestHandler = this.requestHandlers[this.activeRequest.type];
+
+        if (requestHandler !== undefined) {
+            try {
+                msg = JSON.parse(msg);
+
+                requestHandler.handleMessage(msg);
+
+            } catch (e) {
+                console.log("json parsing failed, discarding request", this.activeRequest, msg, e);
+            }
+
+            return;
+        }
+
+        console.error('unexpected request:', event)
     }
 
     fire(deliverer) {
