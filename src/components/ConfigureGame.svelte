@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
-    import { get } from 'svelte/store';
 
     import { currentGame, myPlayerId, playerCharacter, turnSequence } from '../services/game_service.js';
     import { Characters } from '../services/my_clue_api.js';

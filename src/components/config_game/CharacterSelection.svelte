@@ -15,7 +15,7 @@
         gameService.selectCharacter(character).catch((error) => {
             console.log("azz". error);
             // TODO: show error
-        })
+        });
     }
 
 </script>

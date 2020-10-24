@@ -4,7 +4,7 @@
 
     import { loggedUserName, loggedUserGames } from '../services/authentication_service.js';
     import { cardToCharacter } from '../services/be_client.js';
-    import { characterPlayer, key, playerCharacter } from '../services/game_service.js';
+    import { key } from '../services/game_service.js';
 
     let gameId;
     let gameService = getContext(key);
@@ -78,37 +78,3 @@
     </div>
 
 </div>
-
-<!--
-    <div className="column half">
-        <div className="message"></div>
-
-        { authService.myGames.map(game =>
-        <div className="game" key={game.game_id}>
-            <button className="join hr" type="button" onClick={() => handleJoin(game.game_id)}>
-                <div className="game-code">Codice <span className="code">{game.game_id}</span></div>
-                <div className="synopsis">in cui sei {cardCharacterName(game.character)}{
-                    game.others &&
-                    <span> e stai giocando con {game.others.map((value, index) => {
-                        let divider = index === 0 ? '' : index < game.others!.length - 1 ? ', ' : ' e '
-                        let char = value.character !== undefined ? ' che è ' + cardCharacterName(value.character) : ''
-                        return <span key={index}>{divider}{value.name}{char}</span>
-                    })}</span>
-                }</div>
-                { game.winner !== undefined ?
-                <div>
-                    <div className="button">Terminata</div>
-                    <div>Vincitore: {winner(game)}</div>
-                    <div>Soluzione: {cardName(game.solution_character!)}, {cardName(game.solution_room!)}, {cardName(game.solution_weapon!)}</div>
-                </div>
-                :
-                <div className="button">Riprendi</div>
-                }
-            </button>
-        </div>
-        )}
-    </div>
-    }
-
-</div>
--->
