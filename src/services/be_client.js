@@ -50,7 +50,7 @@ const Knife = 2;
 const LeadPipe = 3;
 const CardRevolver = 4;
 const CardRope = 5;
-const CardWrenck = 6;
+const CardWrench = 6;
 
 const CardKitchen = 7;
 const CardBallroom = 8;
@@ -422,7 +422,27 @@ export function cardToRoom(card) {
 }
 
 export function cardToWeapon(card) {
-    if (card >= CardCandlestick && card <= CardWrenck) {
+    if (card >= CardCandlestick && card <= CardWrench) {
         return Weapons[card - CardCandlestick];
+    }
+}
+
+export function cardI18nName(card) {
+    let x = cardToCharacter(card);
+
+    if (x) {
+        return `game.character.${x}`;
+    }
+
+    x = cardToRoom(card);
+
+    if (x) {
+        return `game.room.${x}`;
+    }
+
+    x = cardToWeapon(card)
+
+    if (x) {
+        return `game.weapon.${x}`;
     }
 }
