@@ -1,33 +1,17 @@
 <script>
-
-    import { playerCharacter, playerPosition } from "../../services/game_service.js";
-    import { BoardHeight, BoardWidth } from "../../services/my_clue_api.js";
+    import { playerCharacter } from "../../services/game_service.js";
 
     export let playerId;
 
-    const w = 100 / BoardWidth;
-    const h = 100 / BoardHeight;
-
     let character = playerCharacter(playerId);
-    let position = playerPosition(playerId);
-
-    function pawn_style(pos) {
-        if (pos.room !== null) {
-            return "";
-        }
-
-        return `position: absolute; left:${pos.map_x * w}%; top:${pos.map_y * h}%;`
-    }
-
-    let style = pawn_style($position);
-
 </script>
 
 <style>
     .pawn {
-        width: 3%;
-        height: 3%;
-        margin: 1px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
 
         background-size: cover;
     }
@@ -53,4 +37,4 @@
     }
 </style>
 
-<div class={`pawn ${$character} ${$position.room === null ? "": $position.room}`} style={style}></div>
+<div class={`pawn ${$character} `}></div>

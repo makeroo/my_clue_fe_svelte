@@ -1,6 +1,7 @@
 <script>
-import { clueBoard, CellType, BoardWidth, BoardHeight } from "../../services/my_clue_api";
-
+    import { clueBoard, CellType, BoardWidth, BoardHeight, GameState } from "../../services/my_clue_api";
+    import { currentGame, turnSequence, currentGameState, myPlayerId, currentPlayer, playerName, playerInCell } from '../../services/game_service.js';
+    import Pawn from "./Pawn.svelte";
 
     export let col;
     export let row;
@@ -28,10 +29,20 @@ import { clueBoard, CellType, BoardWidth, BoardHeight } from "../../services/my_
         cellClass += ` start-${cell[2]}`;
     }
 
+    const playerId = playerInCell(col, row);
+
+    function handleClick () {
+        if ($currentGameState !== GameState.move) {
+            return;
+        }
+
+        
+    }
 </script>
 
 <style>
     .cell {
+        position: relative;
         height: 0;
         padding-top: 100%;
     }
@@ -69,4 +80,8 @@ import { clueBoard, CellType, BoardWidth, BoardHeight } from "../../services/my_
 
 </style>
 
-<div class={cellClass}></div>
+<div class={cellClass} on:click={handleClick}>
+    {#if $playerId !== null}
+        <Pawn playerId={$playerId}/>
+    {/if}
+</div>

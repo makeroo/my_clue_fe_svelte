@@ -2,8 +2,6 @@
     import { clueBoard, Rooms } from "../../services/my_clue_api";
     import Cell from "./Cell.svelte";
     import { _ } from "svelte-i18n";
-    import { turnSequence } from "../../services/game_service.js";
-    import Pawn from "./Pawn.svelte";
 
 </script>
 
@@ -100,8 +98,4 @@
     {#each Rooms as room}
         <div class={`room-title ${room}`}>{$_(`game.room.${room}`)}</div>
     {/each}
-
-    {#each $turnSequence as playerId}
-      <Pawn playerId={playerId}/>
-    {/each}
-  </div>
+</div>
