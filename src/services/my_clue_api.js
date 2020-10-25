@@ -8,6 +8,19 @@ export const GameState = {
     ended: 6
 };
 
+
+export const MoveType = {
+    Start: 1,
+	RollDices: 2,
+	MovingInTheHallway: 3,
+	EnterRoom: 4,
+	QuerySolution: 5,
+	NoCardToReveal: 6,
+	RevealCard: 7,
+	DeclareSolution: 8,
+	Pass: 9
+}
+
 export const PlayerState = {
     playing: 0,
     failed: 1,
@@ -35,13 +48,18 @@ export const Rooms = [
     "study"
 ];
 
+Rooms.Kitchen = 0;
+Rooms.Conservatory = 1;
+Rooms.Loung = 6;
+Rooms.Study = 8;
+
 export const Weapons = [
     "candlestick",
     "knife",
-    "leadPipe",
+    "leadpipe",
     "revolver",
     "rope",
-    "wrenck"
+    "wrench"
 ];
 
 export const CellType = {
@@ -109,8 +127,44 @@ export const clueBoard = [
     [ Lo, Lo, Lo, Lo, Lo, Lo, Lo, __, __, Ha, Ha, Ha, Ha, Ha, Ha, __, __, St, St, St, St, St, St, St ], // 21
     [ Lo, Lo, Lo, Lo, Lo, Lo, Lo, __, __, Ha, Ha, Ha, Ha, Ha, Ha, __, __, St, St, St, St, St, St, St ], // 22
     [ Lo, Lo, Lo, Lo, Lo, Lo, Lo, __, __, Ha, Ha, Ha, Ha, Ha, Ha, __, __, St, St, St, St, St, St, St ], // 23
-    [ Lo, Lo, Lo, Lo, Lo, Lo, $$, MS, $$, Ha, Ha, Ha, Ha, Ha, Ha, $$, __, $$, St, St, St, St, St, St ] // 24
+    [ Lo, Lo, Lo, Lo, Lo, Lo, $$, MS, $$, Ha, Ha, Ha, Ha, Ha, Ha, $$, __, $$, St, St, St, St, St, St ]  // 24
 ];
 
 export const BoardWidth = 24;
 export const BoardHeight = 25;
+
+export function isPlayable(x, y) {
+    if (typeof x !== 'number' || typeof y !== 'number') {
+        return false;
+    }
+
+    if (y < 0 || y >= clueBoard.length) {
+        return false;
+    }
+
+    const cellRow = clueBoard[y];
+
+    if (x < 0 || x >= cellRow.length) {
+        return false;
+    }
+
+    const cell = cellRow[x];
+
+    return cell[0] !== CellType.Blank;
+}
+
+export let roomToPositions = {};
+
+(function annotateBoard() {
+    clueBoard.forEach((rowCells, rowIndex) => {
+        rowCells.forEach((cell, colIndex) => {
+            if (cell[0] !== CellType.Room) {
+                return;
+            }
+
+            roomToPositions[cell[1]] = [rowIndex, colIndex];
+        });
+    });
+})();
+
+export const NOT_IN_ROOM = 0;
