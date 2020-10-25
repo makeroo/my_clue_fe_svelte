@@ -1,8 +1,8 @@
 import { writable, get } from 'svelte/store';
 
-import { GameState, PlayerState } from './my_clue_api.js';
+import { GameState, PlayerState, MoveType, clueBoard, CellType, Rooms, isPlayable, Characters, BoardWidth, NOT_IN_ROOM, roomToPositions } from './my_clue_api.js';
 
-import { MessageType, cardToCharacter } from './be_client.js';
+import { MessageType, cardToCharacter, cardToRoom, samePosition } from './be_client.js';
 
 // Note: these stores are global singletons. They should be game service instance properties instead
 // so that we could build an UI capable of playing several games concurrently.
@@ -11,19 +11,31 @@ import { MessageType, cardToCharacter } from './be_client.js';
 export const currentGame = writable(false)
 export const currentGameState = writable(GameState.starting)
 
+const secretPassages = [
+    [Rooms.Kitchen, Rooms.Study],
+    [Rooms.Conservatory, Rooms.Lounge]
+];
+
 // current game infos
 
 export const myPlayerId = writable(null); // int or null
-const players = {}; //writable({}); // playerId -> store:string
+const players = {}; // playerId -> store:string
 const playersCharacter = {}; // playerId -> store:Character?
 const playersOnline = {}; // playerId -> store:bool
 const playersState = {}; // playerId -> store:PlayerState
 const charactersPlayer = {}; // character -> store:playerId?
-const playersPosition = {}; // character -> {map_x:, map_y:, room:}
+const playersPosition = {}; // playerId -> {map_x:, map_y:, room:}
+const positionToPlayer = []; // y * width + x -> store:playerId?
 
 export const turnSequence = writable([]);
 
 export const currentPlayer = writable(0);
+
+export const myDeck = writable([]);
+
+export const gameHistory = writable([]);
+
+export const gameTurnState = writable({});
 
 // Ideally this is a derived, but its value depends on stores created dinamically as new players
 // join the table. Instead of keeping track of subscriptions, building some index, handling
@@ -67,17 +79,17 @@ export function characterPlayer(character) {
     return store;
 }
 
-export function playerPosition(character) {
-    let store = playersPosition[character];
+export function playerPosition(playerId) {
+    let store = playersPosition[playerId];
 
     if (store === undefined) {
         store = writable({
             map_x: 0,
             map_y: 0,
-            room: null
+            room: NOT_IN_ROOM
         });
 
-        playersPosition[character] = store;
+        playersPosition[playerId] = store;
     }
 
     return store;
@@ -107,6 +119,19 @@ export function playerState(playerId) {
     return store;
 }
 
+export function playerInCell(x, y) {
+    let k = y * BoardWidth + x;
+    let store = positionToPlayer[k];
+
+    if (store === undefined) {
+        store = writable(null);
+
+        positionToPlayer[k] = store;
+    }
+
+    return store;
+}
+
 export class GameService {
     constructor (beClient) {
         this.beClient = beClient;
@@ -121,7 +146,9 @@ export class GameService {
                 }
 
                 if (!get(currentGame)) {
-                    console.warn("ignoring user state update, no current game: msg=", msg);
+                    // maybe a previous game setted it
+                    // player indexes are not cleared when changing game
+                    console.debug("ignoring user state update, no current game: msg=", msg);
                     return;
                 }
 
@@ -159,13 +186,88 @@ export class GameService {
 
         beClient.addRequestHandler(MessageType.notifyGameStarted, {
             handleMessage: (msg) => {
-                console.log("TODO parse game started")
+                myDeck.set(msg.deck);
+                turnSequence.set(msg.players_order);
             }
         });
 
         beClient.addRequestHandler(MessageType.notifyMoveRecord, {
             handleMessage: (msg) => {
                 console.log("TODO parse move record")
+
+                if (msg.type === MoveType.Start) {
+                    gameHistory.set([msg])
+                } else {
+                    gameHistory.set([...get(gameHistory), msg]);
+                 }
+
+                const delta = msg.state_delta;
+
+                if (delta.current_player !== undefined) {
+                    currentPlayer.set(delta.current_player);
+                }
+
+                if (delta.state !== undefined) {
+                    currentGameState.set(delta.state);
+                }
+
+                if (delta.positions !== undefined) {
+                    delta.positions.forEach(position => {
+                        if (!get(turnSequence).includes(position.player_id)) {
+                            console.error('move record, unknown player in position:', msg);
+                            return;
+                        }
+
+                        const store = playerPosition(position.player_id);
+                        const oldPos = get(store);
+
+                        if (samePosition(oldPos, position)) {
+                            console.warn('position not changed:', position)
+                            return;
+                        }
+
+                        if (position.room !== NOT_IN_ROOM) {
+                            let room = cardToRoom(position.room);
+
+                            if (!room) {
+                                console.error('move record, illegal room in position:', msg)
+
+                                return;
+                            }
+
+                            cleanupPositionToPlayer(oldPos)
+
+                            let newPos = assignRoolCellToPlayer(position.room);
+
+                            storePositionToPlayer(position.player_id, newPos);
+
+                        } else if (!isPlayable(position.map_x, position.map_y)) {
+                            console.error('move record, illegal board position:', msg)
+
+                            return;
+
+                        } else {
+                            cleanupPositionToPlayer(oldPos)
+
+                            storePositionToPlayer(position.player_id, position);
+                        }
+
+                        store.set(position)
+                    });
+                }
+
+                if (msg.type === MoveType.RollDices) {
+                    gameTurnState.set(delta);
+                }
+/*                const gameState = msg.StateDelta
+                switch (msg.type) {
+                case MoveType.move:
+                    break;
+                }*/
+                /*
+                "PlayerID":2,"Timestamp":"2020-09-13T06:44:43.334579992+02:00","Move":{},
+                "StateDelta":{"state":5},"type":1}
+                */
             }
         });
     }
@@ -218,6 +320,105 @@ export class GameService {
     async voteStart() {
         return this.beClient.voteStart(true);
     }
+
+    async rollDices() {
+        return this.beClient.rollDices();
+    }
+}
+
+function cleanupPositionToPlayer (pos) {
+    playerInCell(pos.map_x, pos.map_y).set(null);
+}
+
+function addRoomPosToIndex (playerId, pos) {
+    let roomIndex = roomToPlayer[pos.room];
+
+    if (roomIndex === undefined) {
+        roomIndex = [];
+
+        roomToPlayer[pos.room] = roomIndex;
+    }
+
+    while (true) {
+        const idx = Math.random() * Characters.length;
+
+        if (typeof roomIndex[idx] !== number) {
+            roomIndex[idx] = playerId;
+            return;
+        }
+    }
+}
+
+function storePositionToPlayer(playerId, pos) {
+    playerInCell(pos.map_x, pos.map_y).set(playerId)
+}
+
+function assignRoolCellToPlayer(room) {
+    // warning: this function assumes rooms are big enough
+    // to contain every player!
+
+    let availablePositions = roomToPositions[room];
+
+    while (true) {
+        let randomPos = Math.floor(Math.random() * availablePositions.length);
+        let [map_x, map_y] = availablePositions[randomPos];
+
+        if (isFree(map_x, map_y)) {
+            return {
+                room,
+                map_x,
+                map_y
+            };
+        }
+    }
 }
 
 export const key = {}
+
+export function isValidMove(playerId, x, y) {
+    return isPlayable(x, y) && isAdjacent(playerId, x, y) && isFree(x, y)
+}
+
+function isAdjacent (playerId, x, y) {
+    const store = playerPosition(playerId);
+    const pos = get(store);
+
+    if (pos.room !== NOT_IN_ROOM) {
+        // assume isPlayable(x, y) returns true
+        let cell = clueBoard[y][x];
+
+        let room = cardToRoom(pos.room)
+
+        return (
+            (cell[0] === CellType.Door && cell[1] === room)
+            ||
+            (cell[0] === CellType.Room && isThereASecretPassage(cell[1], room))
+        );
+    }
+
+    if (cell[0] === CellType.Room) {
+        const playerCell = clueBoard[pos.map_y][pos.map_x];
+
+        return playerCell[0] === CellType.Door && playerCell[1] === cell[1];
+    }
+
+    const dx = Math.abs(x - pos.map_x);
+    const dy = Math.abs(y - pos.map_y);
+
+    return dx + dy === 1;
+}
+
+function isThereASecretPassage(room1, room2) {
+    for (let passage of secretPassages) {
+        if ((passage[0] === room1 && passage[1] === room2) || (passage[1] === room1 && passage[0] === room2)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function isFree(x, y) {
+    // cell(x,y) must be either door/corridor/start
+    return playerInCell(x, y) === null;
+}
