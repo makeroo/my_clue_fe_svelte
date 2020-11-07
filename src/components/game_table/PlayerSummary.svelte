@@ -17,7 +17,7 @@
 
 <div class:current class="player-summary">
     <span class="name">{$myName}<span>
-    <span class="character">{$_(`game.character.${$myChar}`)}</span>
+    <span class="character">{$_(`character.${$myChar}`)}</span>
     <span class={$myState}></span>
     <span class={$meOnline ? "online" : "offline"}></span>
 </div>

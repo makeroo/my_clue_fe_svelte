@@ -59,7 +59,7 @@
                                         <span>{player.name}</span>
                                     {/if}
                                     {#if player.character}
-                                        <span>{$_(`game.character.${cardToCharacter(player.character)}`)}</span>
+                                        <span>{$_(`character.${cardToCharacter(player.character)}`)}</span>
                                     {/if}
                                 </div>
                             {/each}

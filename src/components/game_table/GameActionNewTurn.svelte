@@ -20,5 +20,5 @@
     <div>{$_('game.turn.mine')}</div>
     <button on:click={rollDices}>{$_('game.action.roll_dices')}</button>
 {:else}
-    <div>{$_('game.turn.others', { name: $currentPlayerName })}</div>
+    <div>{$_('game.turn.others', { values: { name: $currentPlayerName }})}</div>
 {/if}

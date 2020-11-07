@@ -1,52 +1,129 @@
 {
-    "app.name": "Cluedo",
+    "app": {
+        "name": "Cluedo"
+    },
 
-    "landing.first_welcome": "Welcome!",
-    "landing.presentation": "First of all, let's know each other a bit.",
-    "landing.username.placeholder": "Do you have a nickname?",
-    "landing.username.label": "Insert your name or a nickname or anything you want the other players call you:",
-    "landing.signin": "Sign In",
+    "landing": {
+        "first_welcome": "Welcome!",
+        "presentation": "First of all, let's know each other a bit.",
+        "username": {
+            "placeholder": "Do you have a nickname?",
+            "label": "Insert your name or a nickname or anything you want the other players call you:"
+        },
+        "signin": "Sign In"
+    },
 
-    "start_game.new.title": "Start a new game",
-    "start_game.new.create": "Start",
-    "start_game.resume.loading": "Loading started games...",
-    "start_game.resume.title": "Resume a previously started game",
-    "start_game.join.title": "Join a table",
-    "start_game.join.description": "Ask the game code to your friends and type it below:",
-    "start_game.join.join": "Join",
-    "start_game.players": "Players at the table: ",
+    "start_game": {
+        "new": {
+            "title": "Start a new game",
+            "create": "Start"
+        },
+        "resume": {
+            "loading": "Loading started games...",
+            "title": "Resume a previously started game"
+        },
+        "join": {
+            "title": "Join a table",
+            "description": "Ask the game code to your friends and type it below:",
+            "join": "Join"
+        },
+        "players": "Players at the table:"
+    },
 
-    "game.character.missscarlett": "Miss Scarlett",
-    "game.character.revgreen": "Rev. Green",
-    "game.character.colmustard": "Col. Mustard",
-    "game.character.profplum": "Prof. Plum",
-    "game.character.mrspeacock": "Mrs. Peacock",
-    "game.character.mrswhite": "Mrs. White",
+    "character": {
+        "missscarlett": "Miss Scarlett",
+        "revgreen": "Rev. Green",
+        "colmustard": "Col. Mustard",
+        "profplum": "Prof. Plum",
+        "mrspeacock": "Mrs. Peacock",
+        "mrswhite": "Mrs. White"
+    },
 
-    "game.room.kitchen": "Kitchen",
-    "game.room.ball": "Ballroom",
-    "game.room.conservatory": "Conservatory",
-    "game.room.dining": "Dining Room",
-    "game.room.billiard": "Billiard Room",
-    "game.room.library": "Library",
-    "game.room.lounge": "Lounge",
-    "game.room.hall": "Hall",
-    "game.room.study": "Study",
+    "room": {
+        "kitchen": "Kitchen",
+        "ball": "Ballroom",
+        "conservatory": "Conservatory",
+        "dining": "Dining Room",
+        "billiard": "Billiard Room",
+        "library": "Library",
+        "lounge": "Lounge",
+        "hall": "Hall",
+        "study": "Study"
+    },
 
-    "player.me": "me",
+    "weapon": {
+        "candlestick": "Candlestick",
+        "knife": "Knife",
+        "leadpipe": "Lead pipe",
+        "revolver": "Revolver",
+        "rope": "Rope",
+        "wrench": "Wrench"
+    },
 
-    "config_game.title": "New game",
-    "config_game.share_game_code": "Share the game code to invite other players to this table:",
-    "config_game.select_player": "Select your character:",
-    "config_game.start": "Start",
-    "config_game.players_without_character": "The undecided:",
-    "config_game.waiting": "The game will start when all the players have choosen a character and clicked start.",
-    "config_game.press_start": "Tap Start to confirm your decision and tell the other players that you're ready.",
-    "config_game.not_enough_players": "Not enough players to start the game. Share the game ID among your friends to invite them here",
-    "config_game.character_available": "Available",
+    "game": {
+        "phase": {
+            "0": "Starting",
+            "1": "New turn",
+            "2": "Play cards (NOT IMPLEMENTED)",
+            "3": "Move",
+            "4": "Query",
+            "5": "Declare solution",
+            "6": "Game ended"
+        },
+    
+        "turn": {
+            "mine": "It's your turn",
+            "others": "It's {name}'s turn"
+        },
 
-    "error.not_connected": "The server is unreachable",
-    "error.unknown_token": "Authentication failed. Sign up again.",
+        "action": {
+            "move": {
+                "remaining_steps": {
+                    "mine": "You have {steps} steps left",
+                    "others": "{name} is moving. She/he has {steps} left"
+                },
+
+                "dices": "Dices:"
+            },
+    
+            "roll_dices": "Roll Dices"
+        }
+    },
+
+    "player": {
+        "me": "me"
+    },
+
+    "config_game": {
+        "title": "New game",
+        "share_game_code": "Share the game code to invite other players to this table:",
+        "select_player": "Select your character:",
+        "start": "Start",
+        "players_without_character": "The undecided:",
+        "waiting": "The game will start when all the players have choosen a character and clicked start.",
+        "press_start": "Tap Start to confirm your decision and tell the other players that you're ready.",
+        "not_enough_players": "Not enough players to start the game. Share the game ID among your friends to invite them here",
+        "character_available": "Available"
+    },
+
+    "running_game": {
+        "game_code": "Game:"
+    },
+
+    "query": {
+        "selection": {
+            "room": "Room:",
+            "character": "Suspect:",
+            "weapon": "Weapon:"
+        },
+        "ask": "Ask",
+        "pass": "Pass"
+    },
+
+    "error": {
+        "not_connected": "The server is unreachable",
+        "unknown_token": "Authentication failed. Sign up again."
+    },
 
     "": ""
 }

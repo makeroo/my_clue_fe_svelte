@@ -96,6 +96,6 @@
     {/each}
 
     {#each Rooms as room}
-        <div class={`room-title ${room}`}>{$_(`game.room.${room}`)}</div>
+        <div class={`room-title ${room}`}>{$_(`room.${room}`)}</div>
     {/each}
 </div>
