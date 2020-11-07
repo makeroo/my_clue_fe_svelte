@@ -1,4 +1,4 @@
-import { Characters, Rooms, Weapons } from './my_clue_api.js';
+import { Characters, NOT_IN_ROOM, Rooms, Weapons } from './my_clue_api.js';
 
 export let MessageType = {
     signIn: "sign_in",
@@ -431,18 +431,30 @@ export function cardI18nName(card) {
     let x = cardToCharacter(card);
 
     if (x) {
-        return `game.character.${x}`;
+        return `character.${x}`;
     }
 
     x = cardToRoom(card);
 
     if (x) {
-        return `game.room.${x}`;
+        return `room.${x}`;
     }
 
     x = cardToWeapon(card)
 
     if (x) {
-        return `game.weapon.${x}`;
+        return `weapon.${x}`;
     }
+}
+
+export function samePosition(pos1, pos2) {
+    if (pos1.room !== pos2.room) {
+        return false;
+    }
+
+    if (pos1.room !== NOT_IN_ROOM) {
+        return true;
+    }
+
+    return pos1.map_x === pos2.map_x && pos1.map_y === pos2.map_y;
 }
