@@ -1,10 +1,13 @@
 <script>
+    import { getContext } from 'svelte';
     import { clueBoard, CellType, BoardWidth, BoardHeight, GameState } from "../../services/my_clue_api";
-    import { currentGame, turnSequence, currentGameState, myPlayerId, currentPlayer, playerName, playerInCell } from '../../services/game_service.js';
+    import { key, currentGameState, currentPlayer, playerInCell, isValidMove, myPlayerId } from '../../services/game_service.js';
     import Pawn from "./Pawn.svelte";
 
     export let col;
     export let row;
+
+    let gameService = getContext(key);
 
     const cell = clueBoard[row][col];
     let cellClass = `cell ${cell[0]}`;
@@ -16,13 +19,13 @@
         // search for a door nearby
 
         if (col > 0 && clueBoard[row][col - 1][0] === CellType.Door) {
-            cellClass += " door-right";
+            cellClass += " doorv left";
         } else if (col < BoardWidth - 1 && clueBoard[row][col + 1][0] == CellType.Door) {
-            cellClass += " door-left";
+            cellClass += " doorv right";
         } else if (row > 0 && clueBoard[row - 1][col][0] === CellType.Door) {
-            cellClass += " door-up";
+            cellClass += " doorv up";
         } else if (row < BoardHeight - 1 && clueBoard[row + 1][col][0] === CellType.Door) {
-            cellClass += " door-down";
+            cellClass += " doorv down";
         }
 
     } else if (cell[0] === CellType.StartingPoint) {
@@ -36,7 +39,23 @@
             return;
         }
 
-        
+        if ($myPlayerId !== $currentPlayer) {
+            return;
+        }
+
+        if (!isValidMove($currentPlayer, col, row)) {
+            return;
+        }
+
+        switch (cell[0]) {
+            case CellType.Room:
+                gameService.enterRoom(cell[1]);
+                break;
+            case CellType.Door:
+            case CellType.StartingPoint:
+            case CellType.Corridor:
+                gameService.move(col, row);
+        }
     }
 </script>
 
@@ -76,6 +95,21 @@
     }
     .start-mrswhite {
         background-color: #e07ac177;
+    }
+
+    .doorv {
+        background-image: url(../images/door.png);
+        background-size: cover;
+    }
+
+    .doorv.up {
+        transform: rotate(180deg);
+    }
+    .doorv.left {
+        transform: rotate(270deg);
+    }
+    .doorv.right {
+        transform: rotate(90deg);
     }
 
 </style>
