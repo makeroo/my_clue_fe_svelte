@@ -237,9 +237,11 @@ export class GameService {
 
                             cleanupPositionToPlayer(oldPos)
 
-                            let newPos = assignRoolCellToPlayer(position.room);
+                            let newPos = assignRoolCellToPlayer(room);
 
                             storePositionToPlayer(position.player_id, newPos);
+
+                            position = newPos;
 
                         } else if (!isPlayable(position.map_x, position.map_y)) {
                             console.error('move record, illegal board position:', msg)
@@ -258,6 +260,10 @@ export class GameService {
 
                 if (msg.type === MoveType.RollDices) {
                     gameTurnState.set(delta);
+                } else if (msg.type === MoveType.MovingInTheHallway) {
+                    let s = {...get(gameTurnState)};
+                    s.remaining_steps = delta.remaining_steps;
+                    gameTurnState.set(s);
                 }
 /*                const gameState = msg.StateDelta
                 switch (msg.type) {
@@ -324,29 +330,26 @@ export class GameService {
     async rollDices() {
         return this.beClient.rollDices();
     }
+
+    async enterRoom(room) {
+        return this.beClient.enterRoom(room);
+    }
+
+    async move(x, y) {
+        return this.beClient.move(x, y);
+    }
+
+    async querySolution(character, room, weapon) {
+        return this.beClient.querySolution(character, room, weapon);
+    }
+
+    async pass() {
+        return this.beClient.pass();
+    }
 }
 
 function cleanupPositionToPlayer (pos) {
     playerInCell(pos.map_x, pos.map_y).set(null);
-}
-
-function addRoomPosToIndex (playerId, pos) {
-    let roomIndex = roomToPlayer[pos.room];
-
-    if (roomIndex === undefined) {
-        roomIndex = [];
-
-        roomToPlayer[pos.room] = roomIndex;
-    }
-
-    while (true) {
-        const idx = Math.random() * Characters.length;
-
-        if (typeof roomIndex[idx] !== number) {
-            roomIndex[idx] = playerId;
-            return;
-        }
-    }
 }
 
 function storePositionToPlayer(playerId, pos) {
@@ -380,13 +383,13 @@ export function isValidMove(playerId, x, y) {
 }
 
 function isAdjacent (playerId, x, y) {
+    // assume isPlayable(x, y) returns true
+    const cell = clueBoard[y][x];
+
     const store = playerPosition(playerId);
     const pos = get(store);
 
     if (pos.room !== NOT_IN_ROOM) {
-        // assume isPlayable(x, y) returns true
-        let cell = clueBoard[y][x];
-
         let room = cardToRoom(pos.room)
 
         return (
@@ -420,5 +423,5 @@ function isThereASecretPassage(room1, room2) {
 
 function isFree(x, y) {
     // cell(x,y) must be either door/corridor/start
-    return playerInCell(x, y) === null;
+    return get(playerInCell(x, y)) === null;
 }
