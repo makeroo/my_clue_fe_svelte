@@ -162,7 +162,12 @@ export let roomToPositions = {};
                 return;
             }
 
-            roomToPositions[cell[1]] = [rowIndex, colIndex];
+            let pp = roomToPositions[cell[1]];
+            if (pp === undefined) {
+                pp = [];
+                roomToPositions[cell[1]] = pp;
+            }
+            pp.push([colIndex, rowIndex]);
         });
     });
 })();
