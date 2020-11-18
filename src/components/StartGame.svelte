@@ -48,7 +48,7 @@
                 {#each games as game (game.game_id)}
                     <div on:click={() => handleJoin(game.game_id)}>
                         <span>{game.game_id}</span>
-                        <span>{$_(`${game.game.state}`)}</span>
+                        <span>{$_(`game.phase.${game.game.state}`)}</span>
                         <div>
                             <span>{$_("start_game.players")}</span>
                             {#each game.players as player (player.player_id)}
