@@ -12,6 +12,9 @@
     let selectedRoom = null;
     let selectedChar = null;
     let selectedWeapon = null;
+    let answeringPlayerName;
+
+    $: answeringPlayerName = playerName($answeringPlayer);
 
     function pass() {
         gameService.pass()
@@ -39,11 +42,14 @@
 </script>
 
 {#if $revealed !== null }
-    <div>
-        <div>{$answeringPlayer}</div>
-        <div>{$revealed}</div>
-        <div>{$revealedCard}</div>
-    </div>
+    {#if $revealedCard }
+        <div>{$_('declare.revealed.card', { values: { name: $answeringPlayerName }})}</div>
+        <div>{$_(`card.${$revealedCard}`)}</div>
+    {:else if $revealed }
+        <div>{$_('declare.revealed.unseen', { values: { name: $answeringPlayerName }})}</div>
+    {:else}
+        <div>{$_('declare.revealed.passed', { values: { name: $answeringPlayerName }})}</div>
+    {/if}
 {/if}
 
 {#if $myPlayerId !== $currentPlayer }
