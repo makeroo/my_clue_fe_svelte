@@ -73,7 +73,6 @@
         },
 
         "end": {
-            "title": "Game ended",
             "solution": "The solution is:"
         },
 
@@ -138,6 +137,12 @@
             "room": "Room:",
             "character": "Suspect:",
             "weapon": "Weapon:"
+        },
+
+        "revealed": {
+            "card": "{name} show you:",
+            "passed": "{name} didn't have any cards",
+            "unseen": "{name} showed a card"
         }
     },
 

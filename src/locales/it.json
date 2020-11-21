@@ -73,7 +73,6 @@
         },
 
         "end": {
-            "title": "Partita finita",
             "solution": "La soluzione è:"
         },
     
@@ -138,6 +137,12 @@
             "room": "Stanza:",
             "character": "Sospettato:",
             "weapon": "Arma:"
+        },
+
+        "revealed": {
+            "card": "{name} ti ha mostrato:",
+            "passed": "{name} non aveva alcuna carta",
+            "unseen": "{name} ha mostrato una carta"
         }
     },
 
