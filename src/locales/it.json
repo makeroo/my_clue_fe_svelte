@@ -30,16 +30,14 @@
         "players": "Giocatori al tavolo:"
     },
 
-    "character": {
+    "card": {
         "missscarlett": "Miss Scarlett",
         "revgreen": "Rev. Green",
         "colmustard": "Col. Mustard",
         "profplum": "Prof. Plum",
         "mrspeacock": "Mrs. Peacock",
-        "mrswhite": "Mrs. Orchid"
-    },
+        "mrswhite": "Mrs. Orchid",
 
-    "room": {
         "kitchen": "Cucina",
         "ball": "Sala da ballo",
         "conservatory": "Serra",
@@ -48,10 +46,8 @@
         "library": "Biblioteca",
         "lounge": "Salotto",
         "hall": "Ingresso",
-        "study": "Studio"
-    },
+        "study": "Studio",
 
-    "weapon": {
         "candlestick": "Candelabro",
         "knife": "Coltello",
         "leadpipe": "Tubo di piombo",
@@ -76,7 +72,14 @@
             "others": "È il turno di {name}"
         },
 
+        "end": {
+            "title": "Partita finita",
+            "solution": "La soluzione è:"
+        },
+    
         "action": {
+            "roll_dices": "Tira i dadi",
+
             "move": {
                 "remaining_steps": {
                     "mine": "Hai ancora {steps} passi da fare.",
@@ -84,9 +87,7 @@
                 },
 
                 "dices": "Dadi:"
-            },
-    
-            "roll_dices": "Tira i dadi"
+            }
         }
     },
 
@@ -117,13 +118,31 @@
             "weapon": "Indica l'arma:"
         },
         "ask": "Domanda",
-        "pass": "Salta"
+        "pass": "Salta",
+        "waiting_for": "Attendi la domanda di {name}...",
+        "yours": "La tua domanda:",
+        "of": "La domanda di {name}:",
+        "waiting_for_answer_from": "È il turno a rispondere di {name}",
+        "no_cards_to_show": "Passa"
+    },
+
+    "declare": {
+        "title": "Hai trovato la soluzione?",
+        "pass": "Non ancora",
+        "solution": "Ho la soluzione!",
+        "select": "Indica la soluzione:",
+        "send": "Dichiara",
+        "cancel": "Ho cambiato idea, passo",
+
+        "selection": {
+            "room": "Stanza:",
+            "character": "Sospettato:",
+            "weapon": "Arma:"
+        }
     },
 
     "error": {
         "not_connected": "Gioco spento. Se questo messaggio non scompare dopo pochi secondi prova a ricaricare la pagina.",
         "unknown_token": "Autenticazione fallita. Iscriviti di nuovo."
-    },
-
-    "": ""
+    }
 }

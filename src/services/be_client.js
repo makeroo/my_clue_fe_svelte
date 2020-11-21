@@ -427,23 +427,35 @@ export function cardToWeapon(card) {
     }
 }
 
+export function cardName(card) {
+    return cardToCharacter(card) || cardToRoom(card) || cardToWeapon(card);
+}
+
+let _nameToCard = {};
+
+(function() {
+    Weapons.forEach((weapon, index) => {
+        _nameToCard[weapon] = index + 1;
+    });
+
+    Rooms.forEach((room, index) => {
+        _nameToCard[room] = index + 7;
+    });
+
+    Characters.forEach((char, index) => {
+        _nameToCard[char] = index + 16;
+    });
+})();
+
+export function nameToCard(card) {
+    return _nameToCard[card];
+}
+
 export function cardI18nName(card) {
-    let x = cardToCharacter(card);
+    let x = cardName(card);
 
     if (x) {
-        return `character.${x}`;
-    }
-
-    x = cardToRoom(card);
-
-    if (x) {
-        return `room.${x}`;
-    }
-
-    x = cardToWeapon(card)
-
-    if (x) {
-        return `weapon.${x}`;
+        return `card.${x}`;
     }
 }
 
@@ -457,4 +469,20 @@ export function samePosition(pos1, pos2) {
     }
 
     return pos1.map_x === pos2.map_x && pos1.map_y === pos2.map_y;
+}
+
+export function parseDeclaration(v) {
+    if (typeof v !== 'object' || v === null) {
+        return undefined;
+    }
+
+    let room = cardToRoom(v.room), weapon = cardToWeapon(v.weapon), character = cardToCharacter(v.character);
+
+    if (!!room && !!weapon && !!character) {
+        return {
+            room,
+            weapon,
+            character
+        };
+    }
 }

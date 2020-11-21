@@ -1,8 +1,8 @@
 import { writable, get } from 'svelte/store';
 
-import { GameState, PlayerState, MoveType, clueBoard, CellType, Rooms, isPlayable, Characters, BoardWidth, NOT_IN_ROOM, roomToPositions } from './my_clue_api.js';
+import { GameState, PlayerState, MoveType, clueBoard, CellType, Rooms, isPlayable, BoardWidth, NOT_IN_ROOM, roomToPositions } from './my_clue_api.js';
 
-import { MessageType, cardToCharacter, cardToRoom, samePosition } from './be_client.js';
+import { MessageType, cardToCharacter, cardToRoom, samePosition, parseDeclaration, nameToCard, cardName } from './be_client.js';
 
 // Note: these stores are global singletons. They should be game service instance properties instead
 // so that we could build an UI capable of playing several games concurrently.
@@ -10,6 +10,7 @@ import { MessageType, cardToCharacter, cardToRoom, samePosition } from './be_cli
 
 export const currentGame = writable(false)
 export const currentGameState = writable(GameState.starting)
+export const currentGameSolution = writable(null);
 
 const secretPassages = [
     [Rooms.Kitchen, Rooms.Study],
@@ -30,6 +31,10 @@ const positionToPlayer = []; // y * width + x -> store:playerId?
 export const turnSequence = writable([]);
 
 export const currentPlayer = writable(0);
+export const answeringPlayer = writable(null);
+export const currentQuery = writable(null);
+export const revealed = writable(null); // optional bool / three state
+export const revealedCard = writable(null); // optional cardname
 
 export const myDeck = writable([]);
 
@@ -44,6 +49,11 @@ export const gameTurnState = writable({});
 export const playersWithoutCharacter = writable([]);
 
 export function playerName(playerId) {
+    if (playerId === null) {
+        // can happen when resolving answeringPlayer
+        return null;
+    }
+
     let store = players[playerId];
 
     if (store === undefined) {
@@ -193,15 +203,24 @@ export class GameService {
 
         beClient.addRequestHandler(MessageType.notifyMoveRecord, {
             handleMessage: (msg) => {
-                console.log("TODO parse move record")
-
                 if (msg.type === MoveType.Start) {
                     gameHistory.set([msg])
                 } else {
                     gameHistory.set([...get(gameHistory), msg]);
-                 }
+                }
 
                 const delta = msg.state_delta;
+
+                if (msg.type === MoveType.DeclareSolution) {
+                    let state = playerState(msg.player_id);
+
+                    if (delta.state === GameState.ended) {
+                        state.set(PlayerState.winner);
+                        currentGameSolution.set(msg.move);
+                    } else {
+                        state.set(PlayerState.failed);
+                    }
+                }
 
                 if (delta.current_player !== undefined) {
                     currentPlayer.set(delta.current_player);
@@ -209,6 +228,34 @@ export class GameService {
 
                 if (delta.state !== undefined) {
                     currentGameState.set(delta.state);
+
+                    switch (delta.state) {
+                    case GameState.query:
+                        if (delta.answering_player != undefined) {
+                            answeringPlayer.set(delta.answering_player);
+                        }
+
+                        let decl = parseDeclaration(delta.query);
+                        if (decl !== undefined) {
+                            currentQuery.set(decl);
+                        }
+                        break;
+
+                    //case GameState.trySolution:
+                    //    break;
+
+                    case GameState.newTurn:
+                        answeringPlayer.set(null);
+                        currentQuery.set(null);
+                    }
+                }
+
+                if (typeof delta.revealed === 'boolean') {
+                    revealed.set(delta.revealed);
+                    revealedCard.set(cardName(delta.revealed_card));
+                } else {
+                    revealed.set(false);
+                    revealedCard.set(null);
                 }
 
                 if (delta.positions !== undefined) {
@@ -343,6 +390,14 @@ export class GameService {
         return this.beClient.querySolution(character, room, weapon);
     }
 
+    async reveal(card) {
+        return this.beClient.reveal(card);
+    }
+
+    async declareSolution(character, room, weapon) {
+        return this.beClient.declareSolution(character, room, weapon);
+    }
+
     async pass() {
         return this.beClient.pass();
     }
@@ -424,4 +479,12 @@ function isThereASecretPassage(room1, room2) {
 function isFree(x, y) {
     // cell(x,y) must be either door/corridor/start
     return get(playerInCell(x, y)) === null;
+}
+
+export function haveCard(cardName) {
+    const card = nameToCard(cardName);
+
+    const deck = get(myDeck);
+
+    return deck.includes(card);
 }

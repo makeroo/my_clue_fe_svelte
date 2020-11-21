@@ -21,7 +21,7 @@
 </script>
 
 <div>
-    <button type=button on:click={selectCharacter}>{$_(`character.${character}`)}</button>
+    <button type=button on:click={selectCharacter}>{$_(`card.${character}`)}</button>
     {#if $myPlayer === null }
         <p>{$_('config_game.character_available')}</p>
     {:else}

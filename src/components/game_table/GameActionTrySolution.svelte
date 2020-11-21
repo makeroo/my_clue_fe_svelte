@@ -3,8 +3,8 @@
 
     import { _ } from "svelte-i18n";
 
-    import { key, myPlayerId, currentPlayer, playerName } from '../../services/game_service.js';
-import { Characters, Rooms, Weapons } from "../../services/my_clue_api.js";
+    import { key, myPlayerId, currentPlayer, playerName, revealed, answeringPlayer, revealedCard } from '../../services/game_service.js';
+    import { Characters, Rooms, Weapons } from "../../services/my_clue_api.js";
 
     let gameService = getContext(key);
     let currentPlayerName = playerName($currentPlayer);
@@ -38,6 +38,14 @@ import { Characters, Rooms, Weapons } from "../../services/my_clue_api.js";
     }
 </script>
 
+{#if $revealed !== null }
+    <div>
+        <div>{$answeringPlayer}</div>
+        <div>{$revealed}</div>
+        <div>{$revealedCard}</div>
+    </div>
+{/if}
+
 {#if $myPlayerId !== $currentPlayer }
     <div>
         <div>{$_('game.turn.others', { values: { name: $currentPlayerName }})}</div>
@@ -58,7 +66,7 @@ import { Characters, Rooms, Weapons } from "../../services/my_clue_api.js";
                 <p>{$_('declare.selection.room')}</p>
                 <ul>
                     {#each Rooms as room}
-                        <li class:selected={room === selectedRoom}><button on:click={() => selectRoom(room)}>{$_(`room.${room}`)}</button></li>
+                        <li class:selected={room === selectedRoom}><button on:click={() => selectRoom(room)}>{$_(`card.${room}`)}</button></li>
                     {/each}
                 </ul>
             </div>
@@ -66,7 +74,7 @@ import { Characters, Rooms, Weapons } from "../../services/my_clue_api.js";
                 <p>{$_('declare.selection.character')}</p>
                 <ul>
                     {#each Characters as char}
-                        <li class:selected={char === selectedChar}><button on:click={() => selectChar(char)}>{$_(`character.${char}`)}</button></li>
+                        <li class:selected={char === selectedChar}><button on:click={() => selectChar(char)}>{$_(`card.${char}`)}</button></li>
                     {/each}
                 </ul>
             </div>
@@ -74,7 +82,7 @@ import { Characters, Rooms, Weapons } from "../../services/my_clue_api.js";
                 <p>{$_('declare.selection.weapon')}</p>
                 <ul>
                     {#each Weapons as weapon}
-                        <li class:selected={weapon === selectedWeapon}><button on:click={() => selectWeapon(weapon)}>{$_(`weapon.${weapon}`)}</button></li>
+                        <li class:selected={weapon === selectedWeapon}><button on:click={() => selectWeapon(weapon)}>{$_(`card.${weapon}`)}</button></li>
                     {/each}
                 </ul>
             </div>

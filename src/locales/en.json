@@ -30,16 +30,14 @@
         "players": "Players at the table:"
     },
 
-    "character": {
+    "card": {
         "missscarlett": "Miss Scarlett",
         "revgreen": "Rev. Green",
         "colmustard": "Col. Mustard",
         "profplum": "Prof. Plum",
         "mrspeacock": "Mrs. Peacock",
-        "mrswhite": "Mrs. White"
-    },
+        "mrswhite": "Mrs. White",
 
-    "room": {
         "kitchen": "Kitchen",
         "ball": "Ballroom",
         "conservatory": "Conservatory",
@@ -48,10 +46,8 @@
         "library": "Library",
         "lounge": "Lounge",
         "hall": "Hall",
-        "study": "Study"
-    },
+        "study": "Study",
 
-    "weapon": {
         "candlestick": "Candlestick",
         "knife": "Knife",
         "leadpipe": "Lead pipe",
@@ -76,7 +72,14 @@
             "others": "It's {name}'s turn"
         },
 
+        "end": {
+            "title": "Game ended",
+            "solution": "The solution is:"
+        },
+
         "action": {
+            "roll_dices": "Roll Dices",
+
             "move": {
                 "remaining_steps": {
                     "mine": "You have {steps} steps left",
@@ -84,9 +87,7 @@
                 },
 
                 "dices": "Dices:"
-            },
-    
-            "roll_dices": "Roll Dices"
+            }
         }
     },
 
@@ -117,13 +118,31 @@
             "weapon": "Weapon:"
         },
         "ask": "Ask",
-        "pass": "Pass"
+        "pass": "Pass",
+        "waiting_for": "Waiting for {name}'s query...",
+        "yours": "Your query:",
+        "of": "{name}'s query:",
+        "waiting_for_answer_from": "Waiting for {name} to answer...",
+        "no_cards_to_show": "Pass"
+    },
+
+    "declare": {
+        "title": "Have you found the solution?",
+        "pass": "Not yet",
+        "solution": "I've found the solution!",
+        "select": "Enter your solution:",
+        "send": "Declare",
+        "cancel": "I changed my mind, let's pass",
+
+        "selection": {
+            "room": "Room:",
+            "character": "Suspect:",
+            "weapon": "Weapon:"
+        }
     },
 
     "error": {
         "not_connected": "The server is unreachable",
         "unknown_token": "Authentication failed. Sign up again."
-    },
-
-    "": ""
+    }
 }
