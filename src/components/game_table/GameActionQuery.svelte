@@ -2,7 +2,7 @@
     import { getContext } from "svelte";
 
     import { _ } from "svelte-i18n";
-import { nameToCard } from "../../services/be_client";
+    import { nameToCard } from "../../services/be_client";
     import { answeringPlayer, currentPlayer, currentQuery, haveCard, key, myPlayerId, playerName, playerPosition } from "../../services/game_service";
     import { Characters, Weapons } from "../../services/my_clue_api";
 
