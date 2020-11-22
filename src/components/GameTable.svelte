@@ -1,7 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n';
 
-    import { currentGame, turnSequence, currentGameState, myPlayerId, currentPlayer, playerName } from '../services/game_service.js';
+    import { currentGame, turnSequence, currentGameState } from '../services/game_service.js';
     import { GameState } from '../services/my_clue_api.js';
 
     import Board from './game_table/Board.svelte';
@@ -13,8 +13,7 @@
     import GameActionQuery from './game_table/GameActionQuery.svelte';
     import GameActionTrySolution from './game_table/GameActionTrySolution.svelte';
     import GameActionEnded from './game_table/GameActionEnded.svelte';
-
-    let currentPlayerName = playerName($currentPlayer);
+    import History from './game_table/History.svelte';
 </script>
 
 <h1>{$_('app.name')}</h1>
@@ -53,6 +52,6 @@
     <GameActionTrySolution/>
 {:else if $currentGameState === GameState.ended }
     <GameActionEnded/>
-{:else}
-TODO: illegal state, an error
 {/if}
+
+<History/>
