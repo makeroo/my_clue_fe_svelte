@@ -148,6 +148,7 @@
 
     "error": {
         "not_connected": "The server is unreachable",
-        "unknown_token": "Authentication failed. Sign up again."
+        "unknown_token": "Authentication failed. Sign up again.",
+        "unknown_game": "Wrong code"
     }
 }

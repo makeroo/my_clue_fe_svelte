@@ -23,3 +23,22 @@ body {
 	background-color: #5A352A;
 	color: #D8973C;
 }
+
+/* page layout */
+
+.main-grid {
+	display: grid;
+	grid-template-columns: 1rem minmax(200px, 1fr) 1rem;
+	gap: 1rem;
+}
+
+.main-row {
+	grid-column-start: 2;
+}
+
+/* common elements */
+
+.logo {
+	text-align: center;
+	line-height: 2em;
+}
