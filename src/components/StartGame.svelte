@@ -7,7 +7,6 @@
     import { key } from '../services/game_service.js';
     import BigButton from './bricks/BigButton.svelte';
     import TextField from './bricks/TextField.svelte';
-    import Toast from './bricks/Toast.svelte';
 
     let gameId;
     let gameService = getContext(key);
@@ -44,13 +43,13 @@
         {#await $loggedUserGames}
             <p>{$_('start_game.resume.loading')}</p>
         {:then games}
-            {#if games.length > 0}
-                <div class="games-grid">
-                    <h2>{$_('start_game.resume.title')}</h2>
-                    {#each games as game (game.game_id)}
-                        <div class="game" on:click={() => handleJoin(game.game_id)}>
-                            <span class="code">{game.game_id}</span>
-                            <span class="state">{$_(`game.phase.${game.game.state}`)}</span>
+        {#if games.length > 0}
+        <div class="games-grid">
+            <h2>{$_('start_game.resume.title')}</h2>
+            {#each games as game (game.game_id)}
+                <div class="game" on:click={() => handleJoin(game.game_id)}>
+                    <span class="code">{game.game_id}</span>
+                    <span class="state">{$_(`game.phase.${game.game.state}`)}</span>
                             <div class="players">
                                 <p class="title">{$_("start_game.players")}</p>
                                 {#if game.players.length === 1}
@@ -78,15 +77,14 @@
             <h2>{$_('start_game.join.title')}</h2>
             <p>{$_('start_game.join.description')}</p>
             <form on:submit|preventDefault={handleJoin} class="text-and-go">
-                <TextField bind:value={gameId}/>
-                <BigButton class="go">{$_('start_game.join.join')}</BigButton>
+                <TextField class="field" bind:value={gameId}/>
+                <BigButton>{$_('start_game.join.join')}</BigButton>
             </form>
         </div>
 
     </div>
 </div>
 
-<Toast/>
 
 <style>
     .start-grid {
@@ -105,10 +103,12 @@
 
     .text-and-go {
         display: flex;
+        width: 100%;
     }
 
-    .text-and-go :global(.go) {
-        margin-left: .5em;
+    .text-and-go :global(.field) {
+        flex-grow: 1;
+        margin-right: .5em;
     }
 
     .games-grid {

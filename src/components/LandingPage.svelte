@@ -4,7 +4,6 @@
     import { key } from '../services/authentication_service.js';
     import BigButton from './bricks/BigButton.svelte';
     import TextField from './bricks/TextField.svelte';
-    import Toast from './bricks/Toast.svelte';
 
     const authService = getContext(key)
 
@@ -66,5 +65,3 @@
         <BigButton class={`enter main-row ${name ? "valid" : ""}`} on:click={handleSignIn}>{$_('landing.signin')}</BigButton>
     </div>
 </form>
-
-<Toast/>

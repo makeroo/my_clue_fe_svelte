@@ -6,6 +6,8 @@
 
 	import { setContext } from 'svelte';
 
+    import Toast from './components/bricks/Toast.svelte';
+
 	import LandingPage from './components/LandingPage.svelte';
 	import StartGame from './components/StartGame.svelte';
 	import ConfigureGame from './components/ConfigureGame.svelte';
@@ -49,3 +51,5 @@
 		{/if}
 	{/await}
 </main>
+
+<Toast/>
