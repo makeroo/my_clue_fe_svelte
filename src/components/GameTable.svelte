@@ -16,42 +16,88 @@
     import History from './game_table/History.svelte';
 </script>
 
-<h1>{$_('app.name')}</h1>
+<div class="main-grid">
+    <h1 class="main-row logo">{$_('app.name')}</h1>
 
-<Avatar></Avatar>
+    <Avatar/>
 
-<div>{$_('running_game.game_code')}<span>{$currentGame}</span></div>
+    <div class="game-code">
+        <span>{$_('running_game.game_code')}</span>
+        <span class="code">{$currentGame}</span>
+    </div>
 
-<Board></Board>
+    <div class="board">
+        <Board/>
+    </div>
 
+    <!-- players -->
+    <div class="main-row">
+        <div>{$_("game.players")}</div>
+        <div class="turn-sequence">
+            {#each $turnSequence as playerId}
+                <div class="player-summary">
+                    <PlayerSummary playerId={playerId}></PlayerSummary>
+                </div>
+            {/each}
+        </div>
+    </div>
 
-<!-- players -->
-<div>
-    <ul>
-        {#each $turnSequence as playerId}
-            <li>
-                <PlayerSummary playerId={playerId}></PlayerSummary>
-            </li>
-        {/each}
-    </ul>
+    <div class="main-row">
+        <Deck></Deck>
+    </div>
+
+    <div class="main-row">
+        <p>{$_(`game.phase.${$currentGameState}`)}</p>
+    </div>
+
+    <div  class="main-row">
+        {#if $currentGameState === GameState.newTurn }
+            <GameActionNewTurn/>
+        {:else if $currentGameState === GameState.move }
+            <GameActionMove/>
+        {:else if $currentGameState === GameState.query }
+            <GameActionQuery/>
+        {:else if $currentGameState === GameState.trySolution }
+            <GameActionTrySolution/>
+        {:else if $currentGameState === GameState.ended }
+            <GameActionEnded/>
+        {/if}
+    </div>
+
+    <div class="main-row">
+        <History/>
+    </div>
 </div>
 
-<Deck></Deck>
+<style>
+    .game-code {
+        position: absolute;
+        left: .5em;
+        top: .5em;
+        display: flex;
+        flex-direction: column;
+    }
 
-<div>
-    <p>{$_(`game.phase.${$currentGameState}`)}</p>
-</div>
+    .code {
+        color: #C0BCC7;
+        font-family: monospace;
+        font-weight: 800;
+        font-size: 26px;
+    }
 
-{#if $currentGameState === GameState.newTurn }
-    <GameActionNewTurn/>
-{:else if $currentGameState === GameState.move }
-    <GameActionMove/>
-{:else if $currentGameState === GameState.query }
-    <GameActionQuery/>
-{:else if $currentGameState === GameState.trySolution }
-    <GameActionTrySolution/>
-{:else if $currentGameState === GameState.ended }
-    <GameActionEnded/>
-{/if}
+    .board {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        justify-self: center;
+    }
 
-<History/>
+    .turn-sequence {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 1em;
+    }
+
+    .player-summary {
+        padding: .5em;
+    }
+</style>

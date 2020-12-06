@@ -6,9 +6,23 @@
 
 
 <div>
-    <ul>
+    <div>{$_("game.deck")}</div>
+    <div class="deck">
         {#each $myDeck as card}
-            <li>{$_(cardI18nName(card))}</li>
+            <div class="card">{$_(cardI18nName(card))}</div>
         {/each}
-    </ul>
+    </div>
 </div>
+
+
+<style>
+    .deck {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 1em;
+    }
+
+    .card {
+
+    }
+</style>
