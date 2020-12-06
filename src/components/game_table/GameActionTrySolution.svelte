@@ -6,6 +6,8 @@
     import { key, myPlayerId, currentPlayer, playerName, revealed, answeringPlayer, revealedCard } from '../../services/game_service.js';
     import { Characters, Rooms, Weapons } from "../../services/my_clue_api.js";
 
+    import BigButton from '../bricks/BigButton.svelte';
+
     let gameService = getContext(key);
     let currentPlayerName = playerName($currentPlayer);
     let haveSolution = false;
@@ -60,8 +62,8 @@
 {:else if !haveSolution}
     <div>
         <p>{$_('declare.title')}</p>
-        <button type="button" on:click={pass}>{$_('declare.pass')}</button>
-        <button type="button" on:click={declareSolution}>{$_('declare.solution')}</button>
+        <BigButton type="button" on:click={pass}>{$_('declare.pass')}</BigButton>
+        <BigButton type="button" on:click={declareSolution}>{$_('declare.solution')}</BigButton>
     </div>
 
 {:else}
@@ -70,33 +72,57 @@
         <div>
             <div>
                 <p>{$_('declare.selection.room')}</p>
-                <ul>
+                <div class="card-grid">
                     {#each Rooms as room}
-                        <li class:selected={room === selectedRoom}><button on:click={() => selectRoom(room)}>{$_(`card.${room}`)}</button></li>
+                        <div class="card" class:selected={room === selectedRoom}><button on:click={() => selectRoom(room)}>{$_(`card.${room}`)}</button></div>
                     {/each}
-                </ul>
+                </div>
             </div>
             <div>
                 <p>{$_('declare.selection.character')}</p>
-                <ul>
+                <div class="card-grid">
                     {#each Characters as char}
-                        <li class:selected={char === selectedChar}><button on:click={() => selectChar(char)}>{$_(`card.${char}`)}</button></li>
+                        <div class="card" class:selected={char === selectedChar}><button on:click={() => selectChar(char)}>{$_(`card.${char}`)}</button></div>
                     {/each}
-                </ul>
+                </div>
             </div>
             <div>
                 <p>{$_('declare.selection.weapon')}</p>
-                <ul>
+                <div class="card-grid">
                     {#each Weapons as weapon}
-                        <li class:selected={weapon === selectedWeapon}><button on:click={() => selectWeapon(weapon)}>{$_(`card.${weapon}`)}</button></li>
+                        <div class="card" class:selected={weapon === selectedWeapon}><button on:click={() => selectWeapon(weapon)}>{$_(`card.${weapon}`)}</button></div>
                     {/each}
-                </ul>
+                </div>
             </div>
             <div>
-                <button disabled={selectedRoom === null || selectedChar === null || selectedWeapon === null} on:click={declare}>{$_('declare.send')}</button>
-                <button on:click={pass}>{$_('declare.cancel')}</button>
+                <BigButton disabled={selectedRoom === null || selectedChar === null || selectedWeapon === null} on:click={declare}>{$_('declare.send')}</BigButton>
+                <BigButton on:click={pass}>{$_('declare.cancel')}</BigButton>
             </div>
         </div>
 
     </div>
 {/if}
+
+
+<style>
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+        grid-gap: 1em;
+    }
+
+    .selected button {
+        background-color: #BDF7B7;
+    }
+
+    .card button {
+        min-height: 3em;
+        width: 100%;
+        border-radius: 8px;
+        border: 0;
+        margin: .5em;
+        font-family: 'Comfortaa';
+        font-size: initial;
+        outline: none;
+    }
+</style>

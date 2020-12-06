@@ -4,6 +4,8 @@
 
     import { key, myPlayerId, currentPlayer, playerName } from '../../services/game_service.js';
 
+    import BigButton from '../bricks/BigButton.svelte';
+
     let gameService = getContext(key);
     let currentPlayerName = playerName($currentPlayer);
 
@@ -18,7 +20,7 @@
 
 {#if $myPlayerId === $currentPlayer }
     <div>{$_('game.turn.mine')}</div>
-    <button on:click={rollDices}>{$_('game.action.roll_dices')}</button>
+    <BigButton on:click={rollDices}>{$_('game.action.roll_dices')}</BigButton>
 {:else}
     <div>{$_('game.turn.others', { values: { name: $currentPlayerName }})}</div>
 {/if}

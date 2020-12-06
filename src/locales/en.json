@@ -153,6 +153,7 @@
         "not_connected": "The server is unreachable",
         "unknown_token": "Authentication failed. Sign up again.",
         "unknown_game": "Wrong code",
+        "cannot_join_running_game": "You can't join a running game",
         "already_selected": "Character is not available"
     }
 }

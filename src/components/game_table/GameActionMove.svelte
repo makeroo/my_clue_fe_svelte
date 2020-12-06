@@ -9,10 +9,10 @@
 
 
 <div>
-    <div>
+    <div class="dices">
         <div>{$_('game.action.move.dices')}</div>
-        <div>{$gameTurnState.dice1}</div>
-        <div>{$gameTurnState.dice2}</div>
+        <div class="dice">{$gameTurnState.dice1}</div>
+        <div class="dice">{$gameTurnState.dice2}</div>
     </div>
     <div>
         {#if $myPlayerId === $currentPlayer }
@@ -22,3 +22,23 @@
         {/if}
     </div>
 </div>
+
+
+<style>
+    .dices {
+        display: flex;
+        align-items: center;
+    }
+
+    .dice {
+        width: 30px;
+        height: 30px;
+        background-color: #C0BCC7;
+        border-radius: 8px;
+        text-align: center;
+        line-height: 30px;
+        color: #5A352A;
+
+        margin: .5em;
+    }
+</style>

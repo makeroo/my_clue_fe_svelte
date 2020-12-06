@@ -153,6 +153,7 @@
         "not_connected": "Gioco spento. Se questo messaggio non scompare dopo pochi secondi prova a ricaricare la pagina.",
         "unknown_token": "Autenticazione fallita. Iscriviti di nuovo.",
         "unknown_game": "Codice errato",
+        "cannot_join_running_game": "Gioco già iniziato, impossibile aggiungersi",
         "already_selected": "Personaggio già preso"
     }
 }
