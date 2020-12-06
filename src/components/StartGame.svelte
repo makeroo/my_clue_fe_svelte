@@ -18,7 +18,7 @@
     }
 
     function handleJoin (customGameId) {
-        gameService.joinGame(customGameId || gameId).catch((error) => {
+        gameService.joinGame(customGameId).catch((error) => {
             window.pushToast($_(`error.${error.error}`));
         });
     }
@@ -76,7 +76,7 @@
         <div>
             <h2>{$_('start_game.join.title')}</h2>
             <p>{$_('start_game.join.description')}</p>
-            <form on:submit|preventDefault={handleJoin} class="text-and-go">
+            <form on:submit|preventDefault={() => handleJoin(gameId)} class="text-and-go">
                 <TextField class="field" bind:value={gameId}/>
                 <BigButton>{$_('start_game.join.join')}</BigButton>
             </form>
