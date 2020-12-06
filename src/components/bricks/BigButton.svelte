@@ -37,6 +37,16 @@
 	cursor:pointer;
 	color:#065143;
 }
+
+.myButton.disabled {
+	background:linear-gradient(to bottom, #C0BCC7 5%, #aba6b5 100%);
+	background-color:#C0BCC7;
+	border-radius:15px;
+	border:2px solid #333029;
+	display:inline-block;
+	cursor:pointer;
+	color:#065143;
+}
 </style>
 
 <button type="submit" class={"myButton " + $$props.class} on:click><slot></slot></button>
