@@ -104,11 +104,11 @@
 
     {:else}
         <div>
-            <div>
-                <p>{$_('query.yours')}</p>
-                <div>{$_(`card.${$currentQuery.character}`)}</div>
-                <div>{$_(`card.${$currentQuery.weapon}`)}</div>
-                <div>{$_(`card.${$currentQuery.room}`)}</div>
+            <p>{$_('query.yours')}</p>
+            <div class="card-grid">
+                <div class="card"><button>{$_(`card.${$currentQuery.character}`)}</button></div>
+                <div class="card"><button>{$_(`card.${$currentQuery.weapon}`)}</button></div>
+                <div class="card"><button>{$_(`card.${$currentQuery.room}`)}</button></div>
             </div>
             <p>{$_('query.waiting_for_answer_from', { values: { name: $answeringPlayerName }})}</p>
         </div>
@@ -120,26 +120,26 @@
 
     {:else if $myPlayerId === $answeringPlayer }
         <div>
-            <div>
-                <p>{$_('query.of', { values: { name: $currentPlayerName }})}</p>
-                <div class="query character"><button type="button" disabled={!haveCharacter} on:click={revealCharacter}>{$_(`card.${$currentQuery.character}`)}</button></div>
-                <div class="query weapon"><button type="button" disabled={!haveWeapon} on:click={revealWeapon}>{$_(`card.${$currentQuery.weapon}`)}</button></div>
-                <div class="query room"><button type="button" disabled={!haveRoom} on:click={revealRoom}>{$_(`card.${$currentQuery.room}`)}</button></div>
+            <p>{$_('query.of', { values: { name: $currentPlayerName }})}</p>
+            <div class="card-grid">
+                <div class="card query character"><button type="button" disabled={!haveCharacter} on:click={revealCharacter}>{$_(`card.${$currentQuery.character}`)}</button></div>
+                <div class="card query weapon"><button type="button" disabled={!haveWeapon} on:click={revealWeapon}>{$_(`card.${$currentQuery.weapon}`)}</button></div>
+                <div class="card query room"><button type="button" disabled={!haveRoom} on:click={revealRoom}>{$_(`card.${$currentQuery.room}`)}</button></div>
             </div>
             {#if noCardsToShow}
                 <div>
-                    <button type="button" on:click={dontReveal}>{$_('query.no_cards_to_show')}</button>
+                    <BigButton on:click={dontReveal}>{$_('query.no_cards_to_show')}</BigButton>
                 </div>
             {/if}
         </div>
 
     {:else}
         <div>
-            <div>
-                <p>{$_('query.of', { values: { name: $currentPlayerName }})}</p>
-                <div>{$_(`card.${$currentQuery.character}`)}</div>
-                <div>{$_(`card.${$currentQuery.weapon}`)}</div>
-                <div>{$_(`card.${$currentQuery.room}`)}</div>
+            <p>{$_('query.of', { values: { name: $currentPlayerName }})}</p>
+            <div class="card-grid">
+                <div class="card"><button>{$_(`card.${$currentQuery.character}`)}</button></div>
+                <div class="card"><button>{$_(`card.${$currentQuery.weapon}`)}</button></div>
+                <div class="card"><button>{$_(`card.${$currentQuery.room}`)}</button></div>
             </div>
             <p>{$_('query.waiting_for_answer_from', { values: { name: $answeringPlayerName }})}</p>
         </div>
@@ -154,7 +154,7 @@
         grid-gap: 1em;
     }
 
-    .selected {
+    .selected button {
         background-color: #BDF7B7;
     }
 
