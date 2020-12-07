@@ -12,7 +12,7 @@
     let meOnline = playerOnline(playerId);
     let myState = playerState(playerId);
 
-    current = playerId == $currentPlayer;
+    $: current = playerId == $currentPlayer;
 </script>
 
 <div class:current class={`player-summary state-${$myState} ${$meOnline ? "online" : "offline"}`}>
@@ -63,13 +63,16 @@
         color: #e07ac1;
     }
 
-    .player.state-1 { /* failed */
+    .state-1 .character { /* failed */
+        /*background-color: #C0BCC7;*/
+        text-decoration: line-through;
+    }
+
+    .state-2 { /* winner */
         background-color: #BDF7B7;
     }
 
-    .player.state-0 { /* winner */
-        background-color: #C0BCC7;
-    }
+
 /*
     .player.state-0 { / * playing * /
 
