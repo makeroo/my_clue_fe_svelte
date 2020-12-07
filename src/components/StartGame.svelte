@@ -109,6 +109,7 @@
     .text-and-go :global(.field) {
         flex-grow: 1;
         margin-right: .5em;
+        min-width: 0;
     }
 
     .games-grid {
