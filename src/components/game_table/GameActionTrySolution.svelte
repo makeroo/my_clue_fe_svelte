@@ -62,8 +62,8 @@
 {:else if !haveSolution}
     <div>
         <p>{$_('declare.title')}</p>
-        <BigButton type="button" on:click={pass}>{$_('declare.pass')}</BigButton>
-        <BigButton type="button" on:click={declareSolution}>{$_('declare.solution')}</BigButton>
+        <BigButton on:click={pass}>{$_('declare.pass')}</BigButton>
+        <BigButton on:click={declareSolution}>{$_('declare.solution')}</BigButton>
     </div>
 
 {:else}
