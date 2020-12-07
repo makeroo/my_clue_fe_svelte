@@ -1,5 +1,8 @@
 <script>
 
+export let active;
+export let disabled;
+
 </script>
 
 <style>
@@ -49,4 +52,4 @@
 }
 </style>
 
-<button type="submit" class={"myButton " + $$props.class} on:click><slot></slot></button>
+<button {disabled} type="submit" class={"myButton " + $$props.class} class:active class:disabled on:click><slot></slot></button>

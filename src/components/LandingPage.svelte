@@ -62,6 +62,6 @@
         <label for="username" class="main-row">{$_('landing.username.label')}</label>
         <TextField id="username" class="username main-row" placeholder="{$_('landing.username.placeholder')}" bind:value={name} bind:input={nameInput} />
 
-        <BigButton class={`enter main-row ${name ? "valid" : ""}`} on:click={handleSignIn}>{$_('landing.signin')}</BigButton>
+        <BigButton class="enter main-row" valid={name} on:click={handleSignIn}>{$_('landing.signin')}</BigButton>
     </div>
 </form>

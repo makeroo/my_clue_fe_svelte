@@ -18,15 +18,10 @@
         });
     }
 
-    // BigButton has 3 states: available->-, mine->valid, not available->disabled
-    let buttonState;
-
-    $: buttonState = $myPlayer === $myPlayerId ? "valid" : $myPlayer === null ? "" : "disabled";
-
 </script>
 
 <div class="container">
-    <BigButton class={buttonState} on:click={selectCharacter}>{$_(`card.${character}`)}</BigButton>
+    <BigButton active={$myPlayer === $myPlayerId} disabled={$myPlayer !== $myPlayerId && $myPlayer !== null} on:click={selectCharacter}>{$_(`card.${character}`)}</BigButton>
     <div class="name">
         {#if $myPlayer === null }
             <p>{$_('config_game.character_available')}</p>
