@@ -1,5 +1,12 @@
+<script>
+    import { myPlayerId, playerName } from '../../services/game_service';
+
+    let myName = playerName($myPlayerId);
+</script>
+
+
 <div class="container">
-    TODO avatar
+    {$myName}
 </div>
 
 
