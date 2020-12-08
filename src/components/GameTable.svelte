@@ -16,7 +16,7 @@
     import History from './game_table/History.svelte';
 </script>
 
-<div class="main-grid">
+<div>
     <h1 class="main-row logo">{$_('app.name')}</h1>
 
     <Avatar/>
@@ -26,47 +26,48 @@
         <span class="code">{$currentGame}</span>
     </div>
 
-    <div class="board">
-        <Board/>
-    </div>
-
-    <!-- players -->
-    <div class="main-row">
-        <div>{$_("game.players")}</div>
-        <div class="turn-sequence">
-            {#each $turnSequence as playerId}
-                <div class="player-summary">
-                    <PlayerSummary playerId={playerId}></PlayerSummary>
-                </div>
-            {/each}
+    <div class="bpd">
+        <div class="board-container">
+            <Board/>
+        </div>
+    
+        <div class="players">
+            <div>{$_("game.players")}</div>
+            <div class="turn-sequence">
+                {#each $turnSequence as playerId}
+                    <div class="player-summary">
+                        <PlayerSummary playerId={playerId}></PlayerSummary>
+                    </div>
+                {/each}
+            </div>
+        </div>
+    
+        <div class="deck-container">
+            <Deck></Deck>
         </div>
     </div>
 
-    <div class="main-row">
-        <Deck></Deck>
+    <div class="phase-actions">
+        <div>
+            <p>{$_(`game.phase.${$currentGameState}`)}</p>
+        </div>
+
+        <div>
+            {#if $currentGameState === GameState.newTurn }
+                <GameActionNewTurn/>
+            {:else if $currentGameState === GameState.move }
+                <GameActionMove/>
+            {:else if $currentGameState === GameState.query }
+                <GameActionQuery/>
+            {:else if $currentGameState === GameState.trySolution }
+                <GameActionTrySolution/>
+            {:else if $currentGameState === GameState.ended }
+                <GameActionEnded/>
+            {/if}
+        </div>
     </div>
 
-    <div class="main-row">
-        <p>{$_(`game.phase.${$currentGameState}`)}</p>
-    </div>
-
-    <div  class="main-row">
-        {#if $currentGameState === GameState.newTurn }
-            <GameActionNewTurn/>
-        {:else if $currentGameState === GameState.move }
-            <GameActionMove/>
-        {:else if $currentGameState === GameState.query }
-            <GameActionQuery/>
-        {:else if $currentGameState === GameState.trySolution }
-            <GameActionTrySolution/>
-        {:else if $currentGameState === GameState.ended }
-            <GameActionEnded/>
-        {/if}
-    </div>
-
-    <div class="main-row">
-        <History/>
-    </div>
+    <History/>
 </div>
 
 <style>
@@ -85,10 +86,68 @@
         font-size: 26px;
     }
 
-    .board {
+    .bpd {
         grid-column-start: 1;
         grid-column-end: 4;
-        justify-self: center;
+
+        display: grid;
+        grid-gap: 1rem;
+    }
+
+    /* breaking points: 690 ... 990 */
+
+    @media (max-width: 690px) {
+        .players, .deck-container {
+            margin: 0 1em;
+        }
+    }
+
+    @media (min-width: 691px) and (max-width: 990px) {
+        .bpd {
+            grid-template-columns: 500px auto;
+        }
+
+        .players {
+            grid-column-start: 2;
+        }
+
+        .deck-container {
+            grid-column-start: 1;
+            grid-column-end: 3;
+            margin: 0 1em;
+        }
+    }
+
+    @media (min-width: 991px) {
+        .bpd {
+            grid-template-columns: 500px auto;
+            margin-bottom: 1em;
+        }
+
+        .board-container {
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+        .players {
+            grid-column-start: 2;
+        }
+
+        .deck-container {
+            grid-column-start: 2;
+            grid-row-start: 2;
+        }
+    }
+
+    @media (max-width: 513px) {
+        :global(.board-container > div) {
+            margin: auto;
+        }
+    }
+
+    @media (min-width: 514px) {
+        .board-container {
+            padding-left: 1em;
+        }
     }
 
     .turn-sequence {
@@ -99,5 +158,9 @@
 
     .player-summary {
         padding: .5em;
+    }
+
+    .phase-actions {
+        margin: 0 1em;
     }
 </style>
