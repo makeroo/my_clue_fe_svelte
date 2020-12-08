@@ -1,4 +1,6 @@
 <script>
+	// source https://svelte.dev/repl/fef5371fea0f4f43812bd6e1db2e5b8b?version=3.16.7
+
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { backOut } from 'svelte/easing';
