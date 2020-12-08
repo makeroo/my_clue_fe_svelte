@@ -1,6 +1,6 @@
 <script>
 
-export let active;
+export let selected;
 export let disabled;
 
 </script>
@@ -31,7 +31,7 @@ export let disabled;
 	top:1px;
 }
 
-.myButton.valid {
+.myButton.selected {
 	background:linear-gradient(to bottom, #bdf7b7 5%, #abf5a3 100%);
 	background-color:#bdf7b7;
 	border-radius:15px;
@@ -52,4 +52,4 @@ export let disabled;
 }
 </style>
 
-<button {disabled} type="submit" class={"myButton " + $$props.class} class:active class:disabled on:click><slot></slot></button>
+<button {disabled} type="submit" class={`myButton ${$$props.class || ''}`} class:disabled class:selected on:click><slot></slot></button>

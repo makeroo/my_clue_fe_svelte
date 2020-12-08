@@ -21,7 +21,7 @@
 </script>
 
 <div class="container">
-    <BigButton active={$myPlayer === $myPlayerId} disabled={$myPlayer !== $myPlayerId && $myPlayer !== null} on:click={selectCharacter}>{$_(`card.${character}`)}</BigButton>
+    <BigButton selected={$myPlayer === $myPlayerId} disabled={$myPlayer !== $myPlayerId && $myPlayer !== null} on:click={selectCharacter}>{$_(`card.${character}`)}</BigButton>
     <div class="name">
         {#if $myPlayer === null }
             <p>{$_('config_game.character_available')}</p>
