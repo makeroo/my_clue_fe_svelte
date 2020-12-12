@@ -48,10 +48,10 @@ export const Rooms = [
     "study"
 ];
 
-Rooms.Kitchen = 0;
-Rooms.Conservatory = 1;
-Rooms.Loung = 6;
-Rooms.Study = 8;
+export const RoomsKitchen = Rooms[0];
+export const RoomsConservatory = Rooms[2];
+export const RoomsLounge = Rooms[6];
+export const RoomsStudy = Rooms[8];
 
 export const Weapons = [
     "candlestick",

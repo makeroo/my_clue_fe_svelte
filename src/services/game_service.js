@@ -1,6 +1,6 @@
 import { writable, get } from 'svelte/store';
 
-import { GameState, PlayerState, MoveType, clueBoard, CellType, Rooms, isPlayable, BoardWidth, NOT_IN_ROOM, roomToPositions } from './my_clue_api.js';
+import { GameState, PlayerState, MoveType, clueBoard, CellType, isPlayable, BoardWidth, NOT_IN_ROOM, roomToPositions, RoomsKitchen, RoomsStudy, RoomsConservatory, RoomsLounge } from './my_clue_api.js';
 
 import { MessageType, cardToCharacter, cardToRoom, samePosition, parseDeclaration, nameToCard, cardName } from './be_client.js';
 
@@ -13,8 +13,8 @@ export const currentGameState = writable(GameState.starting)
 export const currentGameSolution = writable(null);
 
 const secretPassages = [
-    [Rooms.Kitchen, Rooms.Study],
-    [Rooms.Conservatory, Rooms.Lounge]
+    [RoomsKitchen, RoomsStudy],
+    [RoomsConservatory, RoomsLounge]
 ];
 
 // current game infos
