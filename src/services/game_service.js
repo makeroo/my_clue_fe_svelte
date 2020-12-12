@@ -268,17 +268,21 @@ export class GameService {
                         const store = playerPosition(position.player_id);
                         const oldPos = get(store);
 
-                        if (samePosition(oldPos, position)) {
-                            console.warn('position not changed:', position)
-                            return;
-                        }
-
                         if (position.room !== NOT_IN_ROOM) {
                             let room = cardToRoom(position.room);
 
                             if (!room) {
                                 console.error('move record, illegal room in position:', msg)
 
+                                return;
+                            }
+
+                            let parsedPos = {
+                                room
+                            }
+
+                            if (samePosition(oldPos, parsedPos)) {
+                                console.warn('position not changed:', position)
                                 return;
                             }
 
@@ -296,6 +300,11 @@ export class GameService {
                             return;
 
                         } else {
+                            if (samePosition(oldPos, position)) {
+                                console.warn('position not changed:', position)
+                                return;
+                            }
+
                             cleanupPositionToPlayer(oldPos)
 
                             storePositionToPlayer(position.player_id, position);
@@ -445,9 +454,11 @@ function isAdjacent (playerId, x, y) {
     const pos = get(store);
 
     if (pos.room !== NOT_IN_ROOM) {
-        let room = cardToRoom(pos.room)
+        let room = pos.room
 
         return (
+            (cell[0] === CellType.Room && cell[1] === room)
+            ||
             (cell[0] === CellType.Door && cell[1] === room)
             ||
             (cell[0] === CellType.Room && isThereASecretPassage(cell[1], room))
