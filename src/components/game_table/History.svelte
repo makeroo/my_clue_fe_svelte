@@ -46,75 +46,155 @@
     }
 </script>
 
-<div>
-    <div>
-        <div>turno {turns}</div>
-        <div>{from}</div>
-        <div>{to}</div>
-        <button type="button" on:click={rev} disabled={from === 0}>indietro</button>
-        <button type="button" on:click={fwd} disabled={to === turns}>avanti</button>
+<div class="history">
+    <div class="pagination">
+        <div class="turn">turno {turns}</div>
+        <div class="item from">{from}</div>
+        <div class="item">&mdash;</div>
+        <div class="item to">{to}</div>
+        <button class="item rev" type="button" on:click={rev} disabled={from === 0}>indietro</button>
+        <button class="item fwd" type="button" on:click={fwd} disabled={to === turns}>avanti</button>
     </div>
-    {#each $gameHistory.slice(from, to) as turn}
-        {#if turn.type === MoveType.Start}
-            <div>start</div>
-        {:else if turn.type === MoveType.RollDices}
-            <div>
-                <div>{name(turn.player_id)}</div>
-                <div>lancio dadi</div>
-                <div>{turn.move.dice1}</div>
-                <div>{turn.move.dice2}</div>
+    <div class="turns">
+        {#each $gameHistory.slice(from, to) as turn, i}
+            <div class="turn">
+                <div class="number">{from + i}</div>
+                {#if turn.type === MoveType.Start}
+                    <div>start</div>
+                {:else if turn.type === MoveType.RollDices}
+                    <div>
+                        <div class="player">{name(turn.player_id)}</div>
+                        <div class="move">lancio dadi</div>
+                        <div class="dice">{turn.move.dice1}</div>
+                        <div class="dice">{turn.move.dice2}</div>
+                    </div>
+                {:else if turn.type === MoveType.MovingInTheHallway}
+                    <div>
+                        <div class="player">{name(turn.player_id)}</div>
+                        <div class="move">spostamento</div>
+                        <div class="coord">{turn.move.map_x}</div>
+                        <div class="coord">{turn.move.map_y}</div>
+                    </div>
+                {:else if turn.type === MoveType.EnterRoom}
+                    <div>
+                        <div class="player">{name(turn.player_id)}</div>
+                        <div class="move">entra nella stanza</div>
+                        <div>{$_(`card.${cardName(turn.move.room)}`)}</div>
+                    </div>
+                {:else if turn.type === MoveType.QuerySolution}
+                    <div>
+                        <div class="player">{name(turn.player_id)}</div>
+                        <div class="move">domanda</div>
+                        <div class="card">{$_(`card.${cardName(turn.move.character)}`)}</div>
+                        <div class="card">{$_(`card.${cardName(turn.move.weapon)}`)}</div>
+                        <div class="card">{$_(`card.${cardName(turn.state_delta.query.room)}`)}</div>
+                    </div>
+                {:else if turn.type === MoveType.RevealCard}
+                    <div>
+                        <div class="player">{name(turn.player_id)}</div>
+                        {#if turn.state_delta.revealed_card}
+                            <div class="move">ha mostrato la carta</div>
+                            <div class="card">{$_(`card.${cardName(turn.state_delta.revealed_card)}`)}</div>
+                        {:else}
+                            <div class="move">ha mostrato una carta</div>
+                        {/if}
+                    </div>
+                {:else if turn.type === MoveType.NoCardToReveal}
+                    <div>
+                        <div class="player">{name(turn.player_id)}</div>
+                        <div class="move">non ha mostrato una carta</div>
+                    </div>
+                {:else if turn.type === MoveType.Pass}
+                    <div>
+                        <div class="player">{name(turn.player_id)}</div>
+                        <div class="move">passa</div>
+                    </div>
+                {:else if turn.type === MoveType.DeclareSolution}
+                    <div>
+                        <div class="player">{name(turn.player_id)}</div>
+                        <div class="move">dichiara la soluzione</div>
+                        <div class="card">{$_(`card.${cardName(turn.move.character)}`)}</div>
+                        <div class="card">{$_(`card.${cardName(turn.move.weapon)}`)}</div>
+                        <div class="card">{$_(`card.${cardName(turn.move.room)}`)}</div>
+                    </div>
+                {:else}
+                        <div>{JSON.stringify(turn)}</div>
+                {/if}
             </div>
-    {:else if turn.type === MoveType.MovingInTheHallway}
-        <div>
-            <div>{name(turn.player_id)}</div>
-            <div>spostamento</div>
-            <div>{turn.move.map_x}</div>
-            <div>{turn.move.map_y}</div>
-        </div>
-    {:else if turn.type === MoveType.EnterRoom}
-        <div>
-            <div>{name(turn.player_id)}</div>
-            <div>entra nella stanza</div>
-            <div>{$_(`card.${cardName(turn.move.room)}`)}</div>
-        </div>
-    {:else if turn.type === MoveType.QuerySolution}
-        <div>
-            <div>{name(turn.player_id)}</div>
-            <div>domanda</div>
-            <div>{$_(`card.${cardName(turn.move.character)}`)}</div>
-            <div>{$_(`card.${cardName(turn.move.weapon)}`)}</div>
-            <div>{$_(`card.${cardName(turn.state_delta.query.room)}`)}</div>
-        </div>
-    {:else if turn.type === MoveType.RevealCard}
-        <div>
-            <div>{name(turn.player_id)}</div>
-            {#if turn.state_delta.revealed_card}
-                <div>ha mostrato la carta</div>
-                <div>{$_(`card.${cardName(turn.state_delta.revealed_card)}`)}</div>
-            {:else}
-                <div>ha mostrato una carta</div>
-            {/if}
-        </div>
-    {:else if turn.type === MoveType.NoCardToReveal}
-        <div>
-            <div>{name(turn.player_id)}</div>
-            <div>non ha mostrato una carta</div>
-        </div>
-    {:else if turn.type === MoveType.Pass}
-        <div>
-            <div>{name(turn.player_id)}</div>
-            <div>passa</div>
-        </div>
-    {:else if turn.type === MoveType.DeclareSolution}
-        <div>
-            <div>{name(turn.player_id)}</div>
-            <div>dichiara la soluzione</div>
-            <div>{$_(`card.${cardName(turn.move.character)}`)}</div>
-            <div>{$_(`card.${cardName(turn.move.weapon)}`)}</div>
-            <div>{$_(`card.${cardName(turn.move.room)}`)}</div>
-        </div>
-    {:else}
-            <div>{JSON.stringify(turn)}</div>
-        {/if}
-    {/each}
+        {/each}
+    </div>
 </div>
+
+
+<style>
+    .history {
+        border-top: 1px solid #C0BCC7;
+        margin: 1em;
+        padding-top: .5em;
+    }
+
+    .pagination {
+        display: flex;
+        align-items: center;
+        height: 2em;
+    }
+
+    .pagination .turn {
+        flex-grow: 1;
+    }
+
+    .pagination .item {
+        padding: 4px;
+        margin: 4px;
+    }
+
+    .turns {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+        grid-gap: 1em;
+    }
+
+    .turns .turn {
+        background-color: #6f4234;
+        border-radius: 8px;
+        padding: 4px;
+    }
+
+    .turns .turn .number {
+        color: #C0BCC7;
+        font-family: monospace;
+        font-size: 10px;
+    }
+
+    .turns .turn .player {
+        /*text-shadow:0px 1px 6px #ffffff;*/
+        color: #e4b777;
+        font-weight: bold;
+    }
+
+    .turns .turn .move {
+        margin: .5em 0;
+    }
+
+    .card {
+        background-color: #C0BCC7;
+        color: #452921;
+        padding: .5em;
+        text-align: center;
+        border-radius: 8px;
+        margin: 1em 0;
+    }
+
+    .dice {
+        width: 30px;
+        height: 30px;
+        background-color: #C0BCC7;
+        border-radius: 8px;
+        text-align: center;
+        line-height: 30px;
+        color: #5A352A;
+
+        margin: .5em;
+        float: left;
+    }
+</style>
