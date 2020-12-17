@@ -18,13 +18,13 @@
 
         // search for a door nearby
 
-        if (col > 0 && clueBoard[row][col - 1][0] === CellType.Door) {
+        if (col > 0 && clueBoard[row][col - 1][0] === CellType.Door && clueBoard[row][col - 1][1] === cell[1]) {
             cellClass += " doorv left";
-        } else if (col < BoardWidth - 1 && clueBoard[row][col + 1][0] == CellType.Door) {
+        } else if (col < BoardWidth - 1 && clueBoard[row][col + 1][0] == CellType.Door && clueBoard[row][col + 1][1] === cell[1]) {
             cellClass += " doorv right";
-        } else if (row > 0 && clueBoard[row - 1][col][0] === CellType.Door) {
+        } else if (row > 0 && clueBoard[row - 1][col][0] === CellType.Door && clueBoard[row - 1][col][1] === cell[1]) {
             cellClass += " doorv up";
-        } else if (row < BoardHeight - 1 && clueBoard[row + 1][col][0] === CellType.Door) {
+        } else if (row < BoardHeight - 1 && clueBoard[row + 1][col][0] === CellType.Door && clueBoard[row + 1][col][1] === cell[1]) {
             cellClass += " doorv down";
         }
 
