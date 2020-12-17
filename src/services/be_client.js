@@ -112,18 +112,20 @@ const symbolToCard = {};
 })();
 
 export class BackEndClient {
-    retryDelay = 3512;
-    requestTimeout = 5678;
-
-    connected = false;
-    ws = null;
-    delegates = [];
-    responseHandler = {};
-    requestHandlers = {};
-    activeRequest = null;
-
     constructor (endpoint) {
+        this.retryDelay = 3512;
+        this.requestTimeout = 5678;
+    
+        this.connected = false;
+        this.ws = null;
+        this.delegates = [];
+        this.responseHandler = {};
+        this.requestHandlers = {};
+        this.activeRequest = null;
+
         this.endpoint = endpoint;
+        this.requestId = 0;
+
 
         this.connect();
     }
@@ -267,7 +269,6 @@ export class BackEndClient {
         })
     }
 */
-    requestId = 0
 
     request(reqType, data) {
         return new Promise((resolve, reject) => {
