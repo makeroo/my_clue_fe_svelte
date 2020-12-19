@@ -48,43 +48,43 @@
 
 <div class="history">
     <div class="pagination">
-        <div class="turn">turno {turns}</div>
+        <div class="turn">{$_('history.turn', { values: {turn: turns}})}</div>
         <div class="item from">{from}</div>
         <div class="item">&mdash;</div>
         <div class="item to">{to}</div>
-        <button class="item rev" type="button" on:click={rev} disabled={from === 0}>indietro</button>
-        <button class="item fwd" type="button" on:click={fwd} disabled={to === turns}>avanti</button>
+        <button class="item rev" type="button" on:click={rev} disabled={from === 0}>{$_('history.previous')}</button>
+        <button class="item fwd" type="button" on:click={fwd} disabled={to === turns}>{$_('history.next')}</button>
     </div>
     <div class="turns">
         {#each $gameHistory.slice(from, to) as turn, i}
             <div class="turn">
                 <div class="number">{from + i}</div>
                 {#if turn.type === MoveType.Start}
-                    <div>start</div>
+                    <div>{$_('history.start')}</div>
                 {:else if turn.type === MoveType.RollDices}
                     <div>
                         <div class="player">{name(turn.player_id)}</div>
-                        <div class="move">lancio dadi</div>
+                        <div class="move">{$_('history.roll_dices')}</div>
                         <div class="dice">{turn.move.dice1}</div>
                         <div class="dice">{turn.move.dice2}</div>
                     </div>
                 {:else if turn.type === MoveType.MovingInTheHallway}
                     <div>
                         <div class="player">{name(turn.player_id)}</div>
-                        <div class="move">spostamento</div>
+                        <div class="move">{$_('history.move')}</div>
                         <div class="coord">{turn.move.map_x}</div>
                         <div class="coord">{turn.move.map_y}</div>
                     </div>
                 {:else if turn.type === MoveType.EnterRoom}
                     <div>
                         <div class="player">{name(turn.player_id)}</div>
-                        <div class="move">entra nella stanza</div>
+                        <div class="move">{$_('history.enter_room')}</div>
                         <div>{$_(`card.${cardName(turn.move.room)}`)}</div>
                     </div>
                 {:else if turn.type === MoveType.QuerySolution}
                     <div>
                         <div class="player">{name(turn.player_id)}</div>
-                        <div class="move">domanda</div>
+                        <div class="move">{$_('history.query')}</div>
                         <div class="card">{$_(`card.${cardName(turn.move.character)}`)}</div>
                         <div class="card">{$_(`card.${cardName(turn.move.weapon)}`)}</div>
                         <div class="card">{$_(`card.${cardName(turn.state_delta.query.room)}`)}</div>
@@ -93,26 +93,26 @@
                     <div>
                         <div class="player">{name(turn.player_id)}</div>
                         {#if turn.state_delta.revealed_card}
-                            <div class="move">ha mostrato la carta</div>
+                            <div class="move">{$_('history.card_shown')}</div>
                             <div class="card">{$_(`card.${cardName(turn.state_delta.revealed_card)}`)}</div>
                         {:else}
-                            <div class="move">ha mostrato una carta</div>
+                            <div class="move">{$_('history.card_shown_hidden')}</div>
                         {/if}
                     </div>
                 {:else if turn.type === MoveType.NoCardToReveal}
                     <div>
                         <div class="player">{name(turn.player_id)}</div>
-                        <div class="move">non ha mostrato una carta</div>
+                        <div class="move">{$_('history.card_not_shown')}</div>
                     </div>
                 {:else if turn.type === MoveType.Pass}
                     <div>
                         <div class="player">{name(turn.player_id)}</div>
-                        <div class="move">passa</div>
+                        <div class="move">{$_('history.pass')}</div>
                     </div>
                 {:else if turn.type === MoveType.DeclareSolution}
                     <div>
                         <div class="player">{name(turn.player_id)}</div>
-                        <div class="move">dichiara la soluzione</div>
+                        <div class="move">{$_('history.declare')}</div>
                         <div class="card">{$_(`card.${cardName(turn.move.character)}`)}</div>
                         <div class="card">{$_(`card.${cardName(turn.move.weapon)}`)}</div>
                         <div class="card">{$_(`card.${cardName(turn.move.room)}`)}</div>

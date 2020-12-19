@@ -149,6 +149,23 @@
         }
     },
 
+    "history": {
+        "turn": "turno {turn}",
+        "previous": "indietro",
+        "next": "avanti",
+
+        "start": "inizio",
+        "roll_dices": "lancio dadi",
+        "move": "spostamento",
+        "enter_room": "entra nella stanza",
+        "query": "domanda",
+        "card_shown": "ha mostrato la carta",
+        "card_show_hidden": "ha mostrato una carta",
+        "card_not_shown": "non ha mostrato la carta",
+        "pass": "passa",
+        "declare": "dichiara la soluzione"
+    },
+
     "error": {
         "not_connected": "Gioco spento. Se questo messaggio non scompare dopo pochi secondi prova a ricaricare la pagina.",
         "unknown_token": "Autenticazione fallita. Iscriviti di nuovo.",

@@ -149,6 +149,23 @@
         }
     },
 
+    "history": {
+        "turn": "turn {turn}",
+        "previous": "rew",
+        "next": "fwd",
+
+        "start": "start",
+        "roll_dices": "roll dices",
+        "move": "movement",
+        "enter_room": "enter room",
+        "query": "query",
+        "card_shown": "shown a card",
+        "card_show_hidden": "shown a card",
+        "card_not_shown": "didn't shown a card",
+        "pass": "pass",
+        "declare": "declare the solution"
+    },
+
     "error": {
         "not_connected": "The server is unreachable",
         "unknown_token": "Authentication failed. Sign up again.",
