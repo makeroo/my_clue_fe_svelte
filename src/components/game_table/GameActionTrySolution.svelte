@@ -45,11 +45,15 @@
 
 {#if $revealed !== null }
     {#if $revealedCard }
-        <div>{$_('declare.revealed.card', { values: { name: $answeringPlayerName }})}</div>
+        {#if $answeringPlayer === $myPlayerId }
+            <div>{$_('declare.revealed.card_me')}</div>
+        {:else}
+            <div>{$_('declare.revealed.card', { values: { name: $answeringPlayerName }})}</div>
+        {/if}
         <div>{$_(`card.${$revealedCard}`)}</div>
     {:else if $revealed }
         <div>{$_('declare.revealed.unseen', { values: { name: $answeringPlayerName }})}</div>
-    {:else}
+    {:else if $revealed !== null }
         <div>{$_('declare.revealed.passed', { values: { name: $answeringPlayerName }})}</div>
     {/if}
 {/if}

@@ -144,6 +144,7 @@
 
         "revealed": {
             "card": "{name} ti ha mostrato:",
+            "card_me": "hai mostrato:",
             "passed": "{name} non aveva alcuna carta",
             "unseen": "{name} ha mostrato una carta"
         }

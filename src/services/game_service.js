@@ -254,7 +254,7 @@ export class GameService {
                     revealed.set(delta.revealed);
                     revealedCard.set(cardName(delta.revealed_card));
                 } else {
-                    revealed.set(false);
+                    revealed.set(null);
                     revealedCard.set(null);
                 }
 

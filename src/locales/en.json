@@ -144,6 +144,7 @@
 
         "revealed": {
             "card": "{name} show you:",
+            "card_me": "you revealed:",
             "passed": "{name} didn't have any cards",
             "unseen": "{name} showed a card"
         }
