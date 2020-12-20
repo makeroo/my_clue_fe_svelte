@@ -191,6 +191,8 @@ export class GameService {
                         }
                     }
                 }
+
+                this.recalcPlayersWithoutCharacters();
             }
         });
 
@@ -321,15 +323,6 @@ export class GameService {
                     s.remaining_steps = delta.remaining_steps;
                     gameTurnState.set(s);
                 }
-/*                const gameState = msg.StateDelta
-                switch (msg.type) {
-                case MoveType.move:
-                    break;
-                }*/
-                /*
-                "PlayerID":2,"Timestamp":"2020-09-13T06:44:43.334579992+02:00","Move":{},
-                "StateDelta":{"state":5},"type":1}
-                */
             }
         });
     }
@@ -372,7 +365,30 @@ export class GameService {
             }
 
             turnSequence.set(players);
+            this.recalcPlayersWithoutCharacters();
         });
+    }
+
+    recalcPlayersWithoutCharacters () {
+        var pwc = [];
+
+        const myId = get(myPlayerId);
+
+        for (const p in players) {
+            const playerId = +p; // in ff Object keys are always string
+
+            if (playerId === myId) {
+                continue;
+            }
+
+            const character = get(playerCharacter(playerId));
+
+            if (character === null) {
+                pwc.push(playerId);
+            }
+        }
+
+        playersWithoutCharacter.set(pwc);
     }
 
     async selectCharacter(character) {
